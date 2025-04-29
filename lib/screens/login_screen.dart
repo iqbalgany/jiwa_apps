@@ -18,12 +18,18 @@ class _LoginScreenState extends State<LoginScreen> {
   void _verificationBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: false,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+        return Container(
+          height: MediaQuery.sizeOf(context).height * 0.85,
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(30),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Align(
                 alignment: Alignment.center,

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class RegistrationFormScreen extends StatefulWidget {
@@ -9,12 +11,20 @@ class RegistrationFormScreen extends StatefulWidget {
 }
 
 class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
-  TextEditingController _referralCodeController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _numberController = TextEditingController();
-  TextEditingController _citizenshipController = TextEditingController();
+  final TextEditingController _referralCodeController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _citizenshipController = TextEditingController();
+  final TextEditingController _jobController = TextEditingController();
   String _selectedNationality = '';
+  String _selectedJob = '';
+  int? _selectedGender;
+
+  final Map<int, String> genderLables = {
+    0: 'Laki-laki',
+    1: 'Perempuan',
+  };
 
   final List<String> _countries = [
     'Indonesia',
@@ -24,15 +34,141 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
     'Thailand',
     'Other',
   ];
+  final List<String> _jobs = [
+    'Enterpreneur',
+    'Pelajar / Mahasiswa',
+    'karyawan Swasta',
+    'Pegawai Negeri Sipil',
+    'Ibu Rumah Tangga',
+    'Lainnya',
+  ];
+
+  void _showJobBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          height: MediaQuery.sizeOf(context).height * 0.9,
+          width: MediaQuery.sizeOf(context).width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 40,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[300],
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    'Pilih Pekerjaan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close_rounded),
+                  )
+                ],
+              ),
+              SizedBox(height: 10),
+              Column(
+                children: _jobs.asMap().entries.map(
+                  (entry) {
+                    String job = entry.value;
+                    return ListTile(
+                      onTap: () {
+                        setState(() {
+                          _selectedJob = job;
+                        });
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        job,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      trailing: Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _selectedJob == job
+                              ? AppColors.primary
+                              : Colors.transparent,
+                          border: Border.all(
+                            color: _selectedJob == job
+                                ? AppColors.primary
+                                : Colors.grey[300]!,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ).toList(),
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _jobController.text = _selectedJob;
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: AppColors.whiteText,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   void _showCitizenshipBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.all(20),
+        return Container(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          height: MediaQuery.sizeOf(context).height * 0.9,
+          width: MediaQuery.sizeOf(context).width,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Align(
                 alignment: Alignment.center,
@@ -65,9 +201,15 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
               ),
               SizedBox(height: 10),
               Column(
-                children: _countries.map(
-                  (country) {
+                children: _countries.asMap().entries.map(
+                  (entry) {
+                    String country = entry.value;
                     return ListTile(
+                      onTap: () {
+                        setState(() {
+                          _selectedNationality = country;
+                        });
+                      },
                       contentPadding: EdgeInsets.zero,
                       title: Text(
                         country,
@@ -77,34 +219,49 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                           color: Colors.black,
                         ),
                       ),
-                      trailing: Radio<String>(
-                        value: country,
-                        groupValue: _selectedNationality,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedNationality = value!;
-                          });
-                          Navigator.pop(context);
-                        },
+                      trailing: Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _selectedNationality == country
+                              ? AppColors.primary
+                              : Colors.transparent,
+                          border: Border.all(
+                            color: _selectedNationality == country
+                                ? AppColors.primary
+                                : Colors.grey[300]!,
+                            width: 2,
+                          ),
+                        ),
                       ),
                     );
                   },
                 ).toList(),
               ),
-              Container(
-                width: MediaQuery.sizeOf(context).width,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Center(
-                  child: Text(
-                    'Confirm',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: AppColors.white,
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _citizenshipController.text = _selectedNationality;
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: AppColors.whiteText,
+                      ),
                     ),
                   ),
                 ),
@@ -117,217 +274,310 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    DateTime? selectDate = await showDatePicker(
+    DateTime selectDate = DateTime.now();
+    await showCupertinoModalPopup(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      builder: (context) {
+        return CupertinoActionSheet(
+          actions: <Widget>[
+            SizedBox(
+              height: 300,
+              width: MediaQuery.sizeOf(context).width,
+              child: CupertinoDatePicker(
+                initialDateTime: DateTime.now(),
+                minimumDate: DateTime(1900),
+                maximumDate: DateTime(2100),
+                mode: CupertinoDatePickerMode.date,
+                onDateTimeChanged: (DateTime newDate) {
+                  selectDate = newDate;
+                },
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _dateController.text =
+                      DateFormat("EEEE, dd MMMM yyyy", "id_ID")
+                          .format(selectDate);
+                });
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(20),
+                height: 50,
+                width: MediaQuery.sizeOf(context).width,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Center(
+                  child: Text(
+                    'Confirm',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: AppColors.whiteText,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      },
     );
-
-    if (selectDate != null) {
-      setState(() {
-        _dateController.text = "${selectDate.toLocal()}".split(' ')[0];
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: GestureDetector(
-          onTap: FocusScope.of(context).unfocus,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Kami ingin kenal kamu lebih dekat',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Kami ingin kenal kamu lebih dekat',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.black,
                 ),
-                SizedBox(height: 10),
-                Text(
-                  'Masukkan nama dan tanggal lahir kamu ya!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Masukkan nama dan tanggal lahir kamu ya!',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                  color: AppColors.greyText,
+                ),
+              ),
+              SizedBox(height: 25),
+
+              /// KODE REFERRAL
+              TextField(
+                controller: _referralCodeController,
+                decoration: InputDecoration(
+                  hintText: 'Kode Referral (Opsional)',
+                  hintStyle: TextStyle(
                     color: AppColors.greyText,
                   ),
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _referralCodeController,
-                  decoration: InputDecoration(
-                    hintText: 'Kode Referral (Opsional)',
-                    hintStyle: TextStyle(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
                       color: AppColors.greyText,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
-                      ),
-                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    hintText: 'Nama Kamu *',
-                    hintStyle: TextStyle(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
                       color: AppColors.greyText,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
-                      ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 25),
+
+              /// NAME
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  hintText: 'Nama Kamu *',
+                  hintStyle: TextStyle(
+                    color: AppColors.greyText,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.greyText,
                     ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
-                      ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.greyText,
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
-                Text(
-                  'Jenis Kelamin *',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
+              ),
+              SizedBox(height: 25),
+
+              /// GENDER
+              Text(
+                'Jenis Kelamin *',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  color: Colors.black,
                 ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    Container(
-                      height: 30,
-                      width: 30,
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedGender = 0;
+                      });
+                    },
+                    child: Container(
+                      height: 20,
+                      width: 20,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.transparent,
+                        color: _selectedGender == 0
+                            ? AppColors.primary
+                            : Colors.transparent,
                         border: Border.all(
-                          color: Colors.grey[300]!,
+                          color: _selectedGender == 0
+                              ? AppColors.primary
+                              : Colors.grey[300]!,
                           width: 2,
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Laki-laki',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Laki-laki',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Colors.black,
                     ),
-                    SizedBox(width: 30),
-                    Container(
-                      height: 30,
-                      width: 30,
+                  ),
+                  SizedBox(width: 30),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedGender = 1;
+                      });
+                    },
+                    child: Container(
+                      height: 20,
+                      width: 20,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.transparent,
+                        color: _selectedGender == 1
+                            ? AppColors.primary
+                            : Colors.transparent,
                         border: Border.all(
-                          color: Colors.grey[300]!,
+                          color: _selectedGender == 1
+                              ? AppColors.primary
+                              : Colors.grey[300]!,
                           width: 2,
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Perempuan',
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Perempuan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 25),
+
+              /// DATE OF BIRTH
+              TextField(
+                controller: _dateController,
+                decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.calendar_month_outlined),
+                  hintText: 'Tanggal Lahir *',
+                  hintStyle: TextStyle(color: AppColors.greyText),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.greyText)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.greyText)),
+                ),
+                onTap: () => _selectDate(context),
+                readOnly: true,
+              ),
+              SizedBox(height: 25),
+
+              /// NUMBER
+              TextField(
+                controller: _numberController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Nomor Telepon',
+                  hintStyle: TextStyle(
+                    color: AppColors.greyText,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.greyText,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.greyText,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 25),
+
+              /// CITIZENSHIP
+              TextField(
+                controller: _citizenshipController,
+                decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                  hintText: 'Kewarganegaraan',
+                  hintStyle: TextStyle(color: AppColors.greyText),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.greyText)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.greyText)),
+                ),
+                onTap: () => _showCitizenshipBottomSheet(context),
+                readOnly: true,
+              ),
+              SizedBox(height: 25),
+
+              /// JOB
+              TextField(
+                controller: _jobController,
+                decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                  hintText: 'Pekerjaan',
+                  hintStyle: TextStyle(color: AppColors.greyText),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.greyText)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.greyText)),
+                ),
+                onTap: () => _showJobBottomSheet(context),
+                readOnly: true,
+              ),
+              SizedBox(height: 30),
+
+              /// BUTTON
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  height: 60,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Lanjut',
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _dateController,
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.calendar_month_outlined),
-                    hintText: 'Tanggal Lahir *',
-                    hintStyle: TextStyle(color: AppColors.greyText),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.greyText)),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.greyText)),
-                  ),
-                  onTap: () => _selectDate(context),
-                  readOnly: true,
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _numberController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: 'Nomor Telepon',
-                    hintStyle: TextStyle(
-                      color: AppColors.greyText,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
+                        color: AppColors.whiteText,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
-                TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                    hintText: 'Kewarganegaraan',
-                    hintStyle: TextStyle(color: AppColors.greyText),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.greyText)),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.greyText)),
-                  ),
-                  onTap: () => _showCitizenshipBottomSheet(context),
-                  readOnly: true,
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Pekerjaan',
-                    hintStyle: TextStyle(
-                      color: AppColors.greyText,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.greyText,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
