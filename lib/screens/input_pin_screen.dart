@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jiwa_apps/screens/profile_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
+import 'package:jiwa_apps/widgets/nav_bar.dart';
 
 class InputPinScreen extends StatefulWidget {
   const InputPinScreen({super.key});
@@ -84,10 +84,8 @@ class _InputPinScreenState extends State<InputPinScreen> {
                         FocusScope.of(context).previousFocus();
                       }
                       if (isCompleted) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileScreen()));
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => NavBar()));
                       }
                     },
                   ),

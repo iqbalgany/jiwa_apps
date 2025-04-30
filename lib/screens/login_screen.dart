@@ -18,10 +18,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void _verificationBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: false,
+      isScrollControlled: true,
       builder: (context) {
         return Container(
-          height: MediaQuery.sizeOf(context).height * 0.85,
+          height: MediaQuery.sizeOf(context).height * 0.9,
           padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
           decoration: BoxDecoration(
             color: AppColors.white,
@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
               Align(
                 alignment: Alignment.center,
@@ -119,11 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             FocusScope.of(context).previousFocus();
                           }
                           if (isCompleted) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        RegistrationFormScreen()));
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegistrationFormScreen(),
+                              ),
+                            );
                           }
                         },
                       ),
@@ -140,198 +140,196 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Scaffold(
-        backgroundColor: AppColors.primary,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                width: MediaQuery.sizeOf(context).width,
-                height: 200,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Dapet poin dari transaksi\n& layanan prioritas',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: AppColors.whiteText,
-                          ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: AppColors.primary,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+              width: MediaQuery.sizeOf(context).width,
+              height: 200,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Dapet poin dari transaksi\n& layanan prioritas',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: AppColors.whiteText,
                         ),
-                        Text(
-                          'Bisa dapet Plus Poin untuk ditukar\ndengan potongan harga untuk\ntransaksi kamu.',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 12,
-                            color: AppColors.whiteText,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Image.asset(
-                        'assets/people_coffe.png',
-                        fit: BoxFit.cover,
                       ),
+                      Text(
+                        'Bisa dapet Plus Poin untuk ditukar\ndengan potongan harga untuk\ntransaksi kamu.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 12,
+                          color: AppColors.whiteText,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Image.asset(
+                      'assets/people_coffe.png',
+                      fit: BoxFit.cover,
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: MediaQuery.sizeOf(context).width,
+                height: 700,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Masuk',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        'Silahkan masuk dengan email yang terdaftar. Pastikan emaul kamu aktif.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black26,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Masukkan Email Anda',
+                          hintStyle: TextStyle(
+                            color: Colors.black26,
+                            fontSize: 12,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.blueContainer,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: isChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                isChecked = value!;
+                              });
+                            },
+                            activeColor: isChecked ? AppColors.primary : null,
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Dengan masuk kamu menyetujui ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      'Syarat & Ketentuan dan\nkebijakan Privasi ',
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Jiwa+',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          if (isChecked) {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => InputPinScreen(),
+                            //   ),
+                            // );
+                            _verificationBottomSheet(context);
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: isChecked
+                                ? AppColors.primary
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Masuk',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: isChecked
+                                    ? AppColors.white
+                                    : Colors.black26,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  height: 700,
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 20,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Masuk',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Silahkan masuk dengan email yang terdaftar. Pastikan emaul kamu aktif.',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 11,
-                            color: Colors.black26,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Masukkan Email Anda',
-                            hintStyle: TextStyle(
-                              color: Colors.black26,
-                              fontSize: 12,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.blueContainer,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: isChecked,
-                              onChanged: (value) {
-                                setState(() {
-                                  isChecked = value!;
-                                });
-                              },
-                              activeColor: isChecked ? AppColors.primary : null,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Dengan masuk kamu menyetujui ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        'Syarat & Ketentuan dan\nkebijakan Privasi ',
-                                    style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Jiwa+',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            if (isChecked) {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => InputPinScreen(),
-                              //   ),
-                              // );
-                              _verificationBottomSheet(context);
-                            }
-                          },
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: isChecked
-                                  ? AppColors.primary
-                                  : Colors.grey[200],
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Masuk',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: isChecked
-                                      ? AppColors.white
-                                      : Colors.black26,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
