@@ -57,7 +57,7 @@ class _NavBarState extends State<NavBar> {
       alignment: Alignment.bottomCenter,
       child: Container(
         width: MediaQuery.sizeOf(context).width,
-        height: 100,
+        height: 80,
         decoration: BoxDecoration(
           color: AppColors.white,
           border: Border(
@@ -111,7 +111,7 @@ class _NavBarState extends State<NavBar> {
             icon,
             color:
                 currentIndex == index ? AppColors.primary : Colors.grey[300]!,
-            size: 40,
+            size: 30,
           ),
           Text(
             text!,
