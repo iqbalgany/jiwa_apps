@@ -144,6 +144,7 @@ class MenuScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ListView.builder(
+                          padding: EdgeInsets.only(bottom: 80),
                           itemCount: 15,
                           itemBuilder: (context, index) {
                             return Container(
@@ -190,123 +191,18 @@ class MenuScreen extends StatelessWidget {
                             SizedBox(height: 20),
                             Expanded(
                               child: GridView.builder(
-                                padding: EdgeInsets.all(12),
+                                padding: EdgeInsets.only(
+                                    right: 10, bottom: 100, top: 40),
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   childAspectRatio: 0.7,
-                                  crossAxisSpacing: 12,
-                                  mainAxisSpacing: 15,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 50,
                                   crossAxisCount: 2,
                                 ),
-                                itemCount: 2,
+                                itemCount: 9,
                                 itemBuilder: (context, index) {
-                                  return Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black12,
-                                              spreadRadius: 1,
-                                              blurRadius: 3,
-                                              offset: Offset(3, 5),
-                                            )
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 55, 8, 8),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                'Kopi Creamy Latte',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        'Rp20.500',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontSize: 12,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Rp37.000',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontSize: 12,
-                                                          color:
-                                                              AppColors.primary,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .lineThrough,
-                                                          decorationColor:
-                                                              AppColors.primary,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Container(
-                                                    width: 30,
-                                                    height: 30,
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            AppColors.primary,
-                                                        shape: BoxShape.circle),
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      color: AppColors.white,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        child: Image.asset(
-                                          'assets/kopi1.png',
-                                          height: 150,
-                                        ),
-                                      ),
-                                    ],
-                                  );
+                                  return productCard();
                                 },
                               ),
                             ),
@@ -321,6 +217,99 @@ class MenuScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget productCard() {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: Offset(3, 5),
+              )
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 100, 8, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Kopi Creamy Latte',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Rp20.500',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          'Rp37.000',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: AppColors.primary,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: AppColors.primary, shape: BoxShape.circle),
+                      child: Icon(
+                        Icons.add,
+                        color: AppColors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 120,
+          child: Image.asset(
+            'assets/kopi1.png',
+            height: 150,
+          ),
+        ),
+      ],
     );
   }
 

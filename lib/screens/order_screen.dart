@@ -10,11 +10,286 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   int currentIndex = 0;
+  bool takeAwayChecked = false;
+  bool dineInChecked = false;
+  bool deliveryChecked = false;
+  bool selesaiChecked = false;
+  bool dibatalkanChecked = false;
 
   void onTabTapped(int index) {
     setState(() {
       currentIndex = index;
     });
+  }
+
+  void shippingMethod() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 40),
+              width: MediaQuery.sizeOf(context).width,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 5,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black12,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Metode Pengiriman',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  shippingOption(setState, takeAwayChecked, 'Take Away',
+                      (value) {
+                    setState(() {
+                      takeAwayChecked = value!;
+                    });
+                  }),
+                  shippingOption(setState, dineInChecked, 'Dine In', (value) {
+                    setState(() {
+                      dineInChecked = value!;
+                    });
+                  }),
+                  shippingOption(setState, deliveryChecked, 'Delivery',
+                      (value) {
+                    setState(() {
+                      deliveryChecked = value!;
+                    });
+                  }),
+                  Divider(thickness: 0.5),
+                  SizedBox(height: 10),
+                  Text(
+                    'Status Pesanan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  shippingOption(setState, selesaiChecked, 'Selesai', (value) {
+                    setState(() {
+                      selesaiChecked = value!;
+                    });
+                  }),
+                  shippingOption(setState, dibatalkanChecked, 'Dibatalkan',
+                      (value) {
+                    setState(() {
+                      dibatalkanChecked = value!;
+                    });
+                  }),
+                  Divider(thickness: 0.5),
+                  SizedBox(height: 10),
+                  Text(
+                    'Periode Pesanan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.black12,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Start',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '30/04/2024',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.calendar_today_outlined,
+                                    size: 20,
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Container(
+                        height: 1,
+                        width: 40,
+                        color: Colors.black12,
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.black12,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'End',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '30/04/2025',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.calendar_today_outlined,
+                                    size: 20,
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 100),
+                  Row(
+                    children: [
+                      filterButton(
+                        context,
+                        text: 'Reset Filter',
+                        bgColor: AppColors.white,
+                        borderColor: AppColors.black,
+                        textColor: AppColors.black,
+                      ),
+                      SizedBox(width: 20),
+                      filterButton(
+                        context,
+                        text: 'Simpan',
+                        bgColor: AppColors.primary,
+                        borderColor: AppColors.primary,
+                        textColor: AppColors.white,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget filterButton(
+    BuildContext context, {
+    String? text,
+    Color? bgColor,
+    Color? borderColor,
+    Color? textColor,
+  }) {
+    return Expanded(
+      child: Container(
+        width: MediaQuery.sizeOf(context).width,
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: borderColor!)),
+        child: Center(
+          child: Text(
+            text!,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: textColor,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget shippingOption(
+    StateSetter setState,
+    bool isChecked,
+    String? text,
+    Function(bool?) onChanged,
+  ) {
+    return Row(
+      children: [
+        Text(
+          text!,
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 12,
+            color: Colors.black,
+          ),
+        ),
+        Spacer(),
+        Checkbox(
+          value: isChecked,
+          onChanged: onChanged,
+          activeColor: isChecked ? AppColors.primary : null,
+        ),
+      ],
+    );
   }
 
   @override
@@ -112,27 +387,42 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: EdgeInsets.only(
-                  bottom: 90,
-                ),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: AppColors.primary,
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.filter_alt_sharp),
-                    Text(
-                      'Filter',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: AppColors.white,
+              child: GestureDetector(
+                onTap: () {
+                  shippingMethod();
+                },
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(160, 0, 160, 90),
+                  padding: EdgeInsets.symmetric(vertical: 6),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: AppColors.primary,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.filter_alt_sharp,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(width: 6),
+                      Text(
+                        'Filter',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
