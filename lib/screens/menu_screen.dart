@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwa_apps/screens/detail_menu_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -202,7 +203,7 @@ class MenuScreen extends StatelessWidget {
                                 ),
                                 itemCount: 9,
                                 itemBuilder: (context, index) {
-                                  return productCard();
+                                  return productCard(context);
                                 },
                               ),
                             ),
@@ -220,96 +221,100 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Widget productCard() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                spreadRadius: 1,
-                blurRadius: 3,
-                offset: Offset(3, 5),
-              )
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 100, 8, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Kopi Creamy Latte',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Rp20.500',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Text(
-                          'Rp37.000',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                            color: AppColors.primary,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: AppColors.primary, shape: BoxShape.circle),
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ],
-                ),
+  Widget productCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.push(
+          context, MaterialPageRoute(builder: (context) => DetailMenuScreen())),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: Offset(3, 5),
+                )
               ],
             ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8, 100, 8, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Kopi Creamy Latte',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Rp20.500',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            'Rp37.000',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              color: AppColors.primary,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: AppColors.primary, shape: BoxShape.circle),
+                        child: Icon(
+                          Icons.add,
+                          color: AppColors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        Positioned(
-          bottom: 120,
-          child: Image.asset(
-            'assets/kopi1.png',
-            height: 150,
+          Positioned(
+            bottom: 120,
+            child: Image.asset(
+              'assets/kopi1.png',
+              height: 150,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

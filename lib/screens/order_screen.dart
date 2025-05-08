@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -15,11 +16,131 @@ class _OrderScreenState extends State<OrderScreen> {
   bool deliveryChecked = false;
   bool selesaiChecked = false;
   bool dibatalkanChecked = false;
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
 
   void onTabTapped(int index) {
     setState(() {
       currentIndex = index;
     });
+  }
+
+  void _selectStartDate(BuildContext context) {
+    DateTime startDate = DateTime.now();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.sizeOf(context).height * 0.5,
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 300,
+                width: MediaQuery.sizeOf(context).width,
+                child: CalendarDatePicker(
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                  onDateChanged: (DateTime newDate) {
+                    startDate = newDate;
+                  },
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _startDateController.text =
+                        DateFormat('dd/MM/yyyy').format(startDate);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  height: 50,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: AppColors.whiteText,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _selectEndDate(BuildContext context) {
+    DateTime endDate = DateTime.now();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.sizeOf(context).height * 0.5,
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 300,
+                width: MediaQuery.sizeOf(context).width,
+                child: CalendarDatePicker(
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                  onDateChanged: (DateTime newDate) {
+                    endDate = newDate;
+                  },
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _endDateController.text =
+                        DateFormat('dd/MM/yyyy').format(endDate);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  height: 50,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: AppColors.whiteText,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void shippingMethod() {
@@ -138,12 +259,22 @@ class _OrderScreenState extends State<OrderScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    '30/04/2024',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      color: Colors.black,
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _startDateController,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                        contentPadding: EdgeInsets.zero,
+                                      ),
+                                      onTap: () => _selectStartDate(context),
+                                      readOnly: true,
                                     ),
                                   ),
                                   Icon(
@@ -188,12 +319,22 @@ class _OrderScreenState extends State<OrderScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    '30/04/2025',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      color: Colors.black,
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _endDateController,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                        contentPadding: EdgeInsets.zero,
+                                      ),
+                                      onTap: () => _selectEndDate(context),
+                                      readOnly: true,
                                     ),
                                   ),
                                   Icon(
@@ -213,6 +354,19 @@ class _OrderScreenState extends State<OrderScreen> {
                     children: [
                       filterButton(
                         context,
+                        onTap: () {
+                          setState(
+                            () {
+                              takeAwayChecked = false;
+                              dineInChecked = false;
+                              deliveryChecked = false;
+                              selesaiChecked = false;
+                              dibatalkanChecked = false;
+                              _endDateController.clear();
+                              _startDateController.clear();
+                            },
+                          );
+                        },
                         text: 'Reset Filter',
                         bgColor: AppColors.white,
                         borderColor: AppColors.black,
@@ -221,6 +375,9 @@ class _OrderScreenState extends State<OrderScreen> {
                       SizedBox(width: 20),
                       filterButton(
                         context,
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                         text: 'Simpan',
                         bgColor: AppColors.primary,
                         borderColor: AppColors.primary,
@@ -237,28 +394,30 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget filterButton(
-    BuildContext context, {
-    String? text,
-    Color? bgColor,
-    Color? borderColor,
-    Color? textColor,
-  }) {
+  Widget filterButton(BuildContext context,
+      {String? text,
+      Color? bgColor,
+      Color? borderColor,
+      Color? textColor,
+      Function()? onTap}) {
     return Expanded(
-      child: Container(
-        width: MediaQuery.sizeOf(context).width,
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: borderColor!)),
-        child: Center(
-          child: Text(
-            text!,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: textColor,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: MediaQuery.sizeOf(context).width,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: borderColor!)),
+          child: Center(
+            child: Text(
+              text!,
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: textColor,
+              ),
             ),
           ),
         ),

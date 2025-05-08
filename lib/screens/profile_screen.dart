@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwa_apps/screens/login_screen.dart';
+import 'package:jiwa_apps/screens/update_profile_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -178,7 +179,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Spacer(),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UpdateProfileScreen()));
+                      },
                       icon: Icon(
                         Icons.edit_outlined,
                         color: AppColors.secondary,
