@@ -48,6 +48,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: AppColors.white,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) => Container(
@@ -165,6 +166,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: AppColors.white,
       builder: (
         context,
       ) {
@@ -284,6 +286,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     DateTime selectDate = DateTime.now();
     showModalBottomSheet(
       context: context,
+      backgroundColor: AppColors.white,
       isScrollControlled: true,
       builder: (context) {
         return Container(
@@ -307,8 +310,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 onTap: () {
                   setState(() {
                     _dateController.text =
-                        DateFormat("EEEE, dd MMMM yyyy", "id_ID")
-                            .format(selectDate);
+                        DateFormat('dd/MM/yyyy').format(selectDate);
                   });
                   Navigator.pop(context);
                 },
@@ -340,12 +342,102 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
+  void showDeleteAccountBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.white,
+      builder: (context) {
+        return Container(
+          width: MediaQuery.sizeOf(context).width,
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 3,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey[300],
+                ),
+              ),
+              SizedBox(height: 40),
+              Container(
+                width: 130,
+                height: 130,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.no_accounts_outlined,
+                  color: AppColors.secondary,
+                  size: 110,
+                ),
+              ),
+              SizedBox(height: 30),
+              Text(
+                'Kamu yakin mau hapus akun ini?',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              Text(
+                'Profil, XP, dan riwayat transaksi akan ikut dihapus secara permanen bersama dengan akun kamu',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 10,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  deleteButton(
+                    context,
+                    onTap: () {
+                      setState(
+                        () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                    text: 'Batal',
+                    bgColor: AppColors.white,
+                    borderColor: AppColors.black,
+                    textColor: AppColors.black,
+                  ),
+                  SizedBox(width: 20),
+                  deleteButton(
+                    context,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    text: 'Hapus',
+                    bgColor: AppColors.primary,
+                    borderColor: AppColors.primary,
+                    textColor: AppColors.white,
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.white,
+        elevation: 0,
         title: Text(
           'Ubah Profil',
           style: TextStyle(
@@ -742,22 +834,27 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 ),
               ),
               SizedBox(height: 15),
-              Row(
-                children: [
-                  Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.primary,
-                    size: 20,
-                  ),
-                  Text(
-                    'Hapus akun JIWA+',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                      color: Colors.black,
+              GestureDetector(
+                onTap: () {
+                  showDeleteAccountBottomSheet();
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.primary,
+                      size: 20,
                     ),
-                  ),
-                ],
+                    Text(
+                      'Hapus akun JIWA+',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 15),
 
@@ -786,6 +883,37 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 ),
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget deleteButton(BuildContext context,
+      {String? text,
+      Color? bgColor,
+      Color? borderColor,
+      Color? textColor,
+      Function()? onTap}) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: MediaQuery.sizeOf(context).width,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: borderColor!)),
+          child: Center(
+            child: Text(
+              text!,
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: textColor,
+              ),
+            ),
           ),
         ),
       ),

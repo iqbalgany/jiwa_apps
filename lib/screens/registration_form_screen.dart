@@ -50,6 +50,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: AppColors.white,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) => Container(
@@ -167,6 +168,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: AppColors.white,
       builder: (
         context,
       ) {
@@ -341,6 +343,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        backgroundColor: AppColors.white,
         builder: (context) {
           return Container(
             height: MediaQuery.sizeOf(context).height * 0.5,

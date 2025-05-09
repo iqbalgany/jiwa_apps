@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jiwa_apps/screens/detail_order_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -809,24 +810,33 @@ class _OrderScreenState extends State<OrderScreen> {
                         'Pesan Ulang',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
-                          fontSize: 14,
+                          fontSize: 10,
                           color: AppColors.white,
                         ),
                       ),
                     ),
                     Spacer(),
-                    Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: AppColors.primary,
-                      ),
-                      child: Text(
-                        'Detail Pesanan',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: AppColors.white,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailOrderScreen(),
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: AppColors.primary,
+                        ),
+                        child: Text(
+                          'Detail Pesanan',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10,
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),
