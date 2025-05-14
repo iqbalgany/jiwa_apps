@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwa_apps/screens/login_screen.dart';
+import 'package:jiwa_apps/screens/saved_address_screen.dart';
 import 'package:jiwa_apps/screens/update_profile_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
@@ -281,6 +282,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     profileItem(
                       icon: Icons.location_on_outlined,
                       text: 'Alamat Tersimpan',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SavedAddressScreen()));
+                      },
                     ),
                     Divider(),
                     profileItem(
