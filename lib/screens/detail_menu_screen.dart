@@ -108,7 +108,7 @@ class DetailMenuScreen extends StatelessWidget {
                             hintStyle: TextStyle(color: Colors.black26),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
