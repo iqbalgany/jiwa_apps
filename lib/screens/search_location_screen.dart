@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwa_apps/screens/address_form_screen.dart';
+import 'package:jiwa_apps/screens/maps_location_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class SearchLocationScreen extends StatelessWidget {
@@ -21,7 +22,14 @@ class SearchLocationScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: Icon(Icons.map_outlined),
+            child: GestureDetector(
+                onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapsLocationScreen(),
+                      ),
+                    ),
+                child: Icon(Icons.map_outlined)),
           ),
         ],
       ),

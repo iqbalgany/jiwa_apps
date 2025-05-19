@@ -13,6 +13,8 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   google_fonts: ^6.2.1
   intl: ^0.20.2
+  google_maps_flutter: ^2.12.2
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:

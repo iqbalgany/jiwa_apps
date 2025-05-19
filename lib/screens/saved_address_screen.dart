@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwa_apps/screens/address_form_screen.dart';
 import 'package:jiwa_apps/screens/search_location_screen.dart';
 
 import '../utils/colors.dart';
@@ -209,17 +210,23 @@ class SavedAddressScreen extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.topRight,
-                child: Container(
-                  width: 25,
-                  height: 25,
-                  decoration: BoxDecoration(
-                    color: AppColors.greyBG,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.secondary,
-                    size: 25,
+                child: GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddressFormScreen())),
+                  child: Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      color: AppColors.greyBG,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.edit_outlined,
+                      color: AppColors.secondary,
+                      size: 25,
+                    ),
                   ),
                 ),
               ),
