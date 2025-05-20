@@ -247,7 +247,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 ),
                 child: Center(
                   child: Text(
-                    'Lanjut',
+                    'Simpan',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 14,

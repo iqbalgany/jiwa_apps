@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwa_apps/screens/cart_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class DetailMenuScreen extends StatelessWidget {
@@ -200,27 +201,31 @@ class DetailMenuScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 20),
-                  Container(
-                    width: MediaQuery.sizeOf(context).width,
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: AppColors.primary,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 1,
-                          offset: Offset(0, 6),
-                        )
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Tambah ke Keranjang',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: AppColors.white,
+                  GestureDetector(
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CartScreen())),
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppColors.primary,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 1,
+                            offset: Offset(0, 6),
+                          )
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Tambah ke Keranjang',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),

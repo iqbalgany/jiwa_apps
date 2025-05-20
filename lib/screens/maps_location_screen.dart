@@ -13,20 +13,19 @@ class MapsLocationScreen extends StatefulWidget {
 }
 
 class _MapsLocationScreenState extends State<MapsLocationScreen> {
-  //  final LatLng _centerLocation = const LatLng(-7.2575, 112.7521);
   static const LatLng _initialLocation = LatLng(-7.250445, 112.768845);
   LatLng _selectedPosition = const LatLng(-7.2575, 112.7521);
   GoogleMapController? _googleMapController;
   String _address = 'Memuat alamat...';
 
-  // void _recenterMap() {
-  //   _googleMapController?.animateCamera(
-  //     CameraUpdate.newLatLngZoom(_initialLocation, 15.0),
-  //   );
-  //   setState(() {
-  //     _selectedPosition = _initialLocation;
-  //   });
-  // }
+  void _recenterMap() {
+    _googleMapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(_initialLocation, 13),
+    );
+    setState(() {
+      _selectedPosition = _initialLocation;
+    });
+  }
 
   void _onCameraMove(CameraPosition position) {
     setState(() {
@@ -68,7 +67,7 @@ class _MapsLocationScreenState extends State<MapsLocationScreen> {
               children: [
                 GoogleMap(
                   initialCameraPosition:
-                      CameraPosition(target: _initialLocation, zoom: 12),
+                      CameraPosition(target: _initialLocation, zoom: 13),
                   onMapCreated: (controller) {
                     _googleMapController = controller;
                   },
@@ -85,6 +84,19 @@ class _MapsLocationScreenState extends State<MapsLocationScreen> {
                 Center(
                   child: Image.asset('assets/pin_location_2.png', scale: 10),
                 ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () => _recenterMap(),
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
+                      decoration: BoxDecoration(
+                          color: AppColors.white, shape: BoxShape.circle),
+                      child: Icon(Icons.my_location_rounded),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -177,7 +189,7 @@ class _MapsLocationScreenState extends State<MapsLocationScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Taman Jemursari Selatan I No.5a, Jemur Wonosari, Kec. Wonocolo, Surabaya, Jawa Timur 60237, Indonesia',
+                                  _address,
                                   maxLines: 2,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
@@ -200,7 +212,9 @@ class _MapsLocationScreenState extends State<MapsLocationScreen> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(30, 0, 30, 20),
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 15),
                       width: MediaQuery.sizeOf(context).width,
