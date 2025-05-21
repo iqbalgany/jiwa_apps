@@ -112,16 +112,31 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                         trailing: Container(
                           height: 20,
                           width: 20,
+                          padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _selectedJob == job
-                                ? AppColors.primary
-                                : Colors.transparent,
+                            color: AppColors.white,
                             border: Border.all(
                               color: _selectedJob == job
                                   ? AppColors.primary
-                                  : Colors.grey[300]!,
-                              width: 2,
+                                  : Colors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: Container(
+                            height: 10,
+                            width: 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _selectedJob == job
+                                  ? AppColors.primary
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: _selectedJob == job
+                                    ? AppColors.primary
+                                    : Colors.transparent,
+                                width: 2,
+                              ),
                             ),
                           ),
                         ),
@@ -232,16 +247,31 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                         trailing: Container(
                           height: 20,
                           width: 20,
+                          padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _selectedNationality == country
-                                ? AppColors.primary
-                                : Colors.transparent,
+                            color: AppColors.white,
                             border: Border.all(
                               color: _selectedNationality == country
                                   ? AppColors.primary
-                                  : Colors.grey[300]!,
-                              width: 2,
+                                  : Colors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: Container(
+                            height: 10,
+                            width: 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _selectedNationality == country
+                                  ? AppColors.primary
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: _selectedNationality == country
+                                    ? AppColors.primary
+                                    : Colors.transparent,
+                                width: 2,
+                              ),
                             ),
                           ),
                         ),

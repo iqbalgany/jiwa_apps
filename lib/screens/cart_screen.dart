@@ -11,6 +11,87 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   bool isChecked = false;
+  bool isSwitched = false;
+
+  void pickupTimeBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.fromLTRB(30, 10, 30, 20),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
+              )),
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height * 0.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 30,
+                  height: 3,
+                  color: Colors.black12,
+                ),
+              ),
+              SizedBox(height: 30),
+              Text(
+                'Pilih Waktu',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  SizedBox(width: 20),
+                  Text(
+                    'Ambil Sekarang',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    height: 20,
+                    width: 20,
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.white,
+                      border: Border.all(
+                        color: AppColors.primary,
+                        width: 1,
+                      ),
+                    ),
+                    child: Container(
+                      height: 10,
+                      width: 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primary,
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,55 +249,58 @@ class _CartScreenState extends State<CartScreen> {
                 ///
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    width: MediaQuery.sizeOf(context).width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.white,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Pilih Waktu',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.black,
+                  child: GestureDetector(
+                    onTap: () => pickupTimeBottomSheet(),
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      width: MediaQuery.sizeOf(context).width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.white,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Pilih Waktu',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          width: MediaQuery.sizeOf(context).width,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.watch_later_outlined,
-                                color: AppColors.secondary,
-                                size: 24,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Ambil Sekarang',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 12,
-                                  color: Colors.black,
+                          SizedBox(height: 20),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            width: MediaQuery.sizeOf(context).width,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.watch_later_outlined,
+                                  color: AppColors.secondary,
+                                  size: 24,
                                 ),
-                              ),
-                              Spacer(),
-                              Icon(Icons.arrow_drop_down_sharp, size: 30)
-                            ],
-                          ),
-                        )
-                      ],
+                                SizedBox(width: 5),
+                                Text(
+                                  'Ambil Sekarang',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Spacer(),
+                                Icon(Icons.arrow_drop_down_sharp, size: 30)
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -360,13 +444,22 @@ class _CartScreenState extends State<CartScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Ringkasan Pembayaran',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              'Ringkasan Pembayaran',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Icon(
+                              Icons.info_outline_rounded,
+                              color: AppColors.primary,
+                            )
+                          ],
                         ),
                         SizedBox(height: 20),
                         Row(
@@ -427,6 +520,11 @@ class _CartScreenState extends State<CartScreen> {
                                 color: Color(0xff07a60b),
                               ),
                             ),
+                            SizedBox(width: 10),
+                            Icon(
+                              Icons.info_outline_rounded,
+                              color: AppColors.primary,
+                            ),
                             Spacer(),
                             Image.asset('assets/cryptocurrency_logo.png',
                                 scale: 15),
@@ -486,8 +584,8 @@ class _CartScreenState extends State<CartScreen> {
                         Row(
                           children: [
                             Container(
-                              width: 40,
-                              height: 40,
+                              width: 30,
+                              height: 30,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: AppColors.primary,
@@ -495,10 +593,10 @@ class _CartScreenState extends State<CartScreen> {
                               child: Icon(
                                 Icons.discount_outlined,
                                 color: AppColors.secondary,
-                                size: 25,
+                                size: 20,
                               ),
                             ),
-                            SizedBox(width: 15),
+                            SizedBox(width: 20),
                             Text(
                               'Pakai Promo',
                               style: TextStyle(
@@ -516,8 +614,20 @@ class _CartScreenState extends State<CartScreen> {
                         SizedBox(height: 10),
                         Row(
                           children: [
-                            Image.asset('assets/cryptocurrency_logo.png',
-                                scale: 9),
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                    'assets/cryptocurrency_logo.png',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -540,14 +650,19 @@ class _CartScreenState extends State<CartScreen> {
                               ],
                             ),
                             Spacer(),
-                            Text(
-                              '9.728',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12,
-                                color: AppColors.black,
-                              ),
-                            ),
+                            Switch(
+                              value: isSwitched,
+                              onChanged: (value) {
+                                setState(() {
+                                  isSwitched = value;
+                                });
+                              },
+                              activeColor: AppColors.primary,
+                              inactiveTrackColor: Colors.black12,
+                              inactiveThumbColor: Colors.white,
+                              trackOutlineColor:
+                                  WidgetStatePropertyAll(Colors.transparent),
+                            )
                           ],
                         ),
                         SizedBox(height: 10),
@@ -563,31 +678,97 @@ class _CartScreenState extends State<CartScreen> {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: MediaQuery.sizeOf(context).width,
-              height: 100,
-              padding: EdgeInsets.all(20),
+              height: MediaQuery.sizeOf(context).height * 0.19,
               decoration: BoxDecoration(
-                color: AppColors.white,
-              ),
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  height: 60,
-                  width: MediaQuery.sizeOf(context).width,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(30),
+                  color: AppColors.secondary,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 35,
+                          height: 35,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary,
+                          ),
+                          child: Icon(
+                            Icons.notifications_active_rounded,
+                            color: AppColors.white,
+                            size: 20,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Dengan membayar pesanan, anda tellah menyetujui',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 8,
+                                color: Colors.white,
+                              ),
+                            ),
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: 'Syarat Dan Ketentuan',
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 8,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' Kami',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 8,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ]))
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                  child: Center(
-                    child: Text(
-                      'Pilih Pembayaran',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: AppColors.whiteText,
+                  SizedBox(height: 20),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20))),
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Pilih Pembayaran',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: AppColors.whiteText,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           )
