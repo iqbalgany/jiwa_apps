@@ -12,13 +12,135 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   bool isChecked = false;
   bool isSwitched = false;
+  int currentIndex = 0;
+
+  void onTabTapped(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
 
   void pickupTimeBottomSheet() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.fromLTRB(30, 10, 30, 20),
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
+              )),
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height * 0.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 30,
+                  height: 3,
+                  color: Colors.black12,
+                ),
+              ),
+              SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Pilih Waktu',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              Divider(thickness: 0.2),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 30, 0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Ambil Sekarang',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      height: 20,
+                      width: 20,
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.white,
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 1,
+                        ),
+                      ),
+                      child: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary,
+                          border: Border.all(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(),
+              Divider(thickness: 0.2),
+              SizedBox(height: 20),
+              Container(
+                width: MediaQuery.sizeOf(context).width,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                ),
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Konfirmasi',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: AppColors.whiteText,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void termsAndConditionBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(
@@ -39,52 +161,296 @@ class _CartScreenState extends State<CartScreen> {
               ),
               SizedBox(height: 30),
               Text(
-                'Pilih Waktu',
+                'Syarat dan Ketentuan Take Away',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 30),
-              Row(
+              SizedBox(height: 20),
+              Column(
                 children: [
-                  SizedBox(width: 20),
-                  Text(
-                    'Ambil Sekarang',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    height: 20,
-                    width: 20,
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.white,
-                      border: Border.all(
-                        color: AppColors.primary,
-                        width: 1,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '1. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    child: Container(
-                      height: 10,
-                      width: 10,
+                      Expanded(
+                        child: Text(
+                          'Harap ambil pesanan Anda tikda lebih dari 45 menit setelah melakukan order untuk menghindari penurunan kualitas produk.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '2. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Pesanan yang tidak diambil akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '3. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Tunjukkan kode pick-up kepada staf/barista saat mengambil pesanan anda.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void courierOptionsBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
+              )),
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height * 0.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 30,
+                  height: 3,
+                  color: Colors.black12,
+                ),
+              ),
+              SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Pilih Kurir',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              Divider(thickness: 0.2),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.primary,
+                        color: Color.fromARGB(255, 154, 225, 205),
+                      ),
+                      child: Icon(
+                        Icons.local_shipping_outlined,
+                        color: AppColors.white,
+                        size: 20,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'GrabExpress',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      'Rp.10.000',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      height: 20,
+                      width: 20,
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.white,
                         border: Border.all(
                           color: AppColors.primary,
-                          width: 2,
+                          width: 1,
+                        ),
+                      ),
+                      child: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary,
+                          border: Border.all(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xff07a60b),
+                      ),
+                      child: Icon(
+                        Icons.archive,
+                        color: AppColors.white,
+                        size: 20,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'GoSend',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      'Rp.10.500',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      height: 20,
+                      width: 20,
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.white,
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 1,
+                        ),
+                      ),
+                      child: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary,
+                          border: Border.all(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(),
+              Divider(thickness: 0.2),
+              SizedBox(height: 20),
+              Container(
+                width: MediaQuery.sizeOf(context).width,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                ),
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                ],
+                  child: Center(
+                    child: Text(
+                      'Konfirmasi',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: AppColors.whiteText,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -175,14 +541,16 @@ class _CartScreenState extends State<CartScreen> {
                                 color: AppColors.primary,
                               ),
                               child: Icon(
-                                Icons.directions_walk_rounded,
+                                currentIndex == 0
+                                    ? Icons.directions_walk_rounded
+                                    : Icons.delivery_dining_rounded,
                                 color: AppColors.white,
                                 size: 25,
                               ),
                             ),
                             SizedBox(width: 10),
                             Text(
-                              'Take Away',
+                              currentIndex == 0 ? 'Take Away' : 'Delivery',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -247,10 +615,9 @@ class _CartScreenState extends State<CartScreen> {
                 SizedBox(height: 20),
 
                 ///
-                Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: GestureDetector(
-                    onTap: () => pickupTimeBottomSheet(),
+                if (currentIndex == 0) ...[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: Container(
                       padding: EdgeInsets.all(15),
                       width: MediaQuery.sizeOf(context).width,
@@ -270,40 +637,219 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black12),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            width: MediaQuery.sizeOf(context).width,
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.watch_later_outlined,
-                                  color: AppColors.secondary,
-                                  size: 24,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  'Ambil Sekarang',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 12,
-                                    color: Colors.black,
+                          GestureDetector(
+                            onTap: () => pickupTimeBottomSheet(),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black12),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              width: MediaQuery.sizeOf(context).width,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.watch_later_outlined,
+                                    color: AppColors.secondary,
+                                    size: 24,
                                   ),
-                                ),
-                                Spacer(),
-                                Icon(Icons.arrow_drop_down_sharp, size: 30)
-                              ],
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'Ambil Sekarang',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Icon(Icons.arrow_drop_down_sharp, size: 30)
+                                ],
+                              ),
                             ),
                           )
                         ],
                       ),
                     ),
                   ),
-                ),
+                ] else ...[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      width: MediaQuery.sizeOf(context).width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.white,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Alamat Delivery',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(width: 140),
+                              Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  width: MediaQuery.sizeOf(context).width,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(color: AppColors.black),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Ubah Alamat',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Jalan Semolowaru selatan V no.7',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Muhammad Iqbal Al Afgany - 62810987654321',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 11,
+                              color: Colors.black26,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Taman Jemursari Selatan I No.5a, Jemur Wonosari, Kec. Wonocolo, Surabaya, Jawa Timur 60237',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 11,
+                              color: Colors.black26,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: MediaQuery.sizeOf(context).width,
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.greyBG,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Catatan Alamat',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Colors.black26,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.sticky_note_2_rounded,
+                                      color: Colors.black26,
+                                      size: 12,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'test',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12,
+                                        color: Colors.black26,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                          Text(
+                            'Pilih Kurir',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          GestureDetector(
+                            onTap: () => courierOptionsBottomSheet(),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black12),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              width: MediaQuery.sizeOf(context).width,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 30,
+                                    height: 30,
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color.fromARGB(255, 154, 225, 205),
+                                    ),
+                                    child: Icon(
+                                      Icons.local_shipping_outlined,
+                                      color: AppColors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'GrabExpress',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    'Rp10.000',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Icon(Icons.arrow_drop_down_sharp, size: 30)
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
                 SizedBox(height: 20),
 
                 ///
@@ -716,26 +1262,29 @@ class _CartScreenState extends State<CartScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                            RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                text: 'Syarat Dan Ketentuan',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 8,
-                                  color: Colors.white,
+                            GestureDetector(
+                              onTap: () => termsAndConditionBottomSheet(),
+                              child: RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                  text: 'Syarat Dan Ketentuan',
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 8,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: ' Kami',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 8,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ]))
+                                TextSpan(
+                                  text: ' Kami',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 8,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ])),
+                            )
                           ],
                         )
                       ],
@@ -936,39 +1485,41 @@ class _CartScreenState extends State<CartScreen> {
     int? index,
   }) {
     return Expanded(
-      child: Container(
-        width: MediaQuery.sizeOf(context).width,
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: AppColors.primary,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text!,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: AppColors.white,
+      child: GestureDetector(
+        onTap: () {
+          onTabTapped(index!);
+        },
+        child: Container(
+          width: MediaQuery.sizeOf(context).width,
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: currentIndex == index ? AppColors.primary : AppColors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                text!,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color:
+                      currentIndex == index ? AppColors.white : AppColors.black,
+                ),
               ),
-            ),
-            SizedBox(height: 5),
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary,
+              SizedBox(height: 5),
+              SizedBox(
+                width: 40,
+                height: 40,
+                child: Icon(
+                  icon,
+                  color: AppColors.secondary,
+                  size: 30,
+                ),
               ),
-              child: Icon(
-                icon,
-                color: AppColors.white,
-                size: 30,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
