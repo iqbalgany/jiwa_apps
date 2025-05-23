@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwa_apps/screens/payment_method_screen.dart';
 
 import '../utils/colors.dart';
 
@@ -142,10 +143,11 @@ class _CartScreenState extends State<CartScreen> {
         return Container(
           padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              )),
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(30),
+            ),
+          ),
           width: MediaQuery.sizeOf(context).width,
           height: MediaQuery.sizeOf(context).height * 0.5,
           child: Column(
@@ -259,14 +261,12 @@ class _CartScreenState extends State<CartScreen> {
       context: context,
       builder: (context) {
         return Container(
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height * 0.5,
           padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              )),
-          width: MediaQuery.sizeOf(context).width,
-          height: MediaQuery.sizeOf(context).height * 0.5,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -909,73 +909,78 @@ class _CartScreenState extends State<CartScreen> {
                 SizedBox(height: 20),
 
                 ///
-                Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    width: MediaQuery.sizeOf(context).width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.white,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tambahan Order',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.black,
+                if (currentIndex == 0) ...[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      width: MediaQuery.sizeOf(context).width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.white,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tambahan Order',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: AppColors.greyBG,
-                          ),
-                          width: MediaQuery.sizeOf(context).width,
-                          child: Row(
-                            children: [
-                              Text(
-                                'Kantung Belanja',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 12,
-                                  color: Colors.black,
+                          SizedBox(height: 20),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: AppColors.greyBG,
+                            ),
+                            width: MediaQuery.sizeOf(context).width,
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Kantung Belanja',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              ),
-                              Spacer(),
-                              Text(
-                                '+Rp3.500',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 12,
-                                  color: Colors.black,
+                                Spacer(),
+                                Text(
+                                  '+Rp3.500',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 5),
-                              Checkbox(
-                                value: isChecked,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isChecked = value!;
-                                  });
-                                },
-                                activeColor:
-                                    isChecked ? AppColors.primary : null,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                                SizedBox(width: 5),
+                                Checkbox(
+                                  value: isChecked,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isChecked = value!;
+                                    });
+                                  },
+                                  activeColor:
+                                      isChecked ? AppColors.primary : null,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
+                  SizedBox(height: 20),
+                ] else
+                  ... [
+
+                ],
 
                 ///
                 Padding(
@@ -1029,6 +1034,55 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ],
                         ),
+                        if (currentIndex == 0)
+                          ...[
+
+                        ]else ...[
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Take Away Charge',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                'Rp3.500',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Delivery Charge',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                'Rp10.000',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                         SizedBox(height: 10),
                         Divider(thickness: 0.5),
                         SizedBox(height: 10),
@@ -1298,20 +1352,26 @@ class _CartScreenState extends State<CartScreen> {
                         color: AppColors.white,
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20))),
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Pilih Pembayaran',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: AppColors.whiteText,
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PaymentMethodScreen())),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Pilih Pembayaran',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: AppColors.whiteText,
+                            ),
                           ),
                         ),
                       ),
