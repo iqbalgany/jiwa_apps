@@ -1,7 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/colors.dart';
+import '../../utils/colors.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
   const PaymentMethodScreen({super.key});
@@ -22,279 +22,283 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   void recheckOrderBottomSheet() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return Container(
           width: MediaQuery.sizeOf(context).width,
-          height: MediaQuery.sizeOf(context).height * 0.9,
+          height: MediaQuery.sizeOf(context).height * 0.8,
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: 30,
-                    height: 3,
-                    color: Colors.black12,
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 30,
+                  height: 3,
+                  color: Colors.black12,
                 ),
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Periksa kembali pesanan kamu',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Text(
-                  'Anda akan membayar dan melakukan pesanan pada outlet dengan metode pemesanan di bawah ini :',
+              ),
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Periksa kembali pesanan kamu',
                   style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 15),
-                Row(
-                  children: [
-                    Container(
-                      width: 30,
-                      height: 30,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primary,
-                      ),
-                      child: Icon(
-                        Icons.delivery_dining_rounded,
-                        color: AppColors.white,
-                        size: 20,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Delivery',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
+              ),
+              Text(
+                'Anda akan membayar dan melakukan pesanan pada outlet dengan metode pemesanan di bawah ini :',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 10,
+                  color: Colors.black,
                 ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.store_mall_directory_outlined,
-                      color: AppColors.secondary,
-                      size: 40,
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Container(
+                    width: 30,
+                    height: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primary,
                     ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.green[50],
-                                ),
-                                child: Text(
-                                  '0.55 km',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                'KANNA HOMESTAY',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Taman Jemursari Selatan I No.5a, Jemur Wonosari, Kec. Wonocolo, Surabaya, Jawa Timur 60237',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 30),
-                DottedLine(
-                  lineLength: MediaQuery.sizeOf(context).width,
-                  dashLength: 5,
-                  dashColor: Colors.black12,
-                ),
-                SizedBox(height: 30),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Syarat dan Ketentuan Delivery',
+                    child: Icon(
+                      Icons.delivery_dining_rounded,
+                      color: AppColors.white,
+                      size: 20,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Delivery',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w400,
                       fontSize: 14,
                       color: Colors.black,
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '1. ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Harap pastikan alamat dan nomor telepon yang dimasukkan sudah benar dan dapat dihubungi oleh driver.',
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '2. ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Customer harus mengambil produk yang dikembalikan oleh driver ke outlet jika tidak ada respons dari pembeli saat proses pengantaran. Outlet tidak berkewajiban mengantarkan kembali produk yang dikembalikan oleh driver.',
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '3. ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Pesanan yang tidak diambil customer apabila driver mengembalikan produk akan dianggap terjual dan tidak dapat direfund atau digantikan.',
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '4. ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Tunjukan kode pick up kepada staf/barista saat mengambil pesanan Anda di outlet.',
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  height: 100,
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      border: Border(top: BorderSide(color: Colors.black12))),
-                  child: Row(
-                    children: [
-                      optionButton(
-                        context,
-                        text: 'Bantuan',
-                        bgColor: AppColors.white,
-                        borderColor: AppColors.black,
-                        textColor: AppColors.black,
-                        onTap: () {},
-                      ),
-                      SizedBox(width: 20),
-                      optionButton(
-                        context,
-                        text: 'Pesan Ulang',
-                        bgColor: AppColors.primary,
-                        borderColor: AppColors.primary,
-                        textColor: AppColors.white,
-                        onTap: () {},
-                      ),
-                    ],
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Icon(
+                    Icons.store_mall_directory_outlined,
+                    color: AppColors.secondary,
+                    size: 40,
                   ),
-                )
-              ],
-            ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.green[50],
+                              ),
+                              child: Text(
+                                '0.55 km',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.green[300],
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'KANNA HOMESTAY',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Taman Jemursari Selatan I No.5a, Jemur Wonosari, Kec. Wonocolo, Surabaya, Jawa Timur 60237',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 30),
+              DottedLine(
+                lineLength: MediaQuery.sizeOf(context).width,
+                dashLength: 5,
+                dashColor: Colors.black12,
+              ),
+              SizedBox(height: 30),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Syarat dan Ketentuan Delivery',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '1. ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 10,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Harap pastikan alamat dan nomor telepon yang dimasukkan sudah benar dan dapat dihubungi oleh driver.',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '2. ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Customer harus mengambil produk yang dikembalikan oleh driver ke outlet jika tidak ada respons dari pembeli saat proses pengantaran. Outlet tidak berkewajiban mengantarkan kembali produk yang dikembalikan oleh driver.',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '3. ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Pesanan yang tidak diambil customer apabila driver mengembalikan produk akan dianggap terjual dan tidak dapat direfund atau digantikan.',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '4. ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Tunjukan kode pick up kepada staf/barista saat mengambil pesanan Anda di outlet.',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 80),
+              Container(
+                width: MediaQuery.sizeOf(context).width,
+                height: 100,
+                padding: EdgeInsets.symmetric(vertical: 20),
+                decoration: BoxDecoration(
+                    color: AppColors.white,
+                    border: Border(top: BorderSide(color: Colors.black12))),
+                child: Row(
+                  children: [
+                    optionButton(
+                      context,
+                      text: 'Kembali',
+                      bgColor: AppColors.white,
+                      borderColor: AppColors.black,
+                      textColor: AppColors.black,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    optionButton(
+                      context,
+                      text: 'Bayar',
+                      bgColor: AppColors.primary,
+                      borderColor: AppColors.primary,
+                      textColor: AppColors.white,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         );
       },
@@ -538,7 +542,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         onTap: onTap,
         child: Container(
           width: MediaQuery.sizeOf(context).width,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
               color: bgColor,
               borderRadius: BorderRadius.circular(30),

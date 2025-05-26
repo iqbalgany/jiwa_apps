@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/payment_method_screen.dart';
+import 'package:jiwa_apps/screens/menu/payment_method_screen.dart';
 
-import '../utils/colors.dart';
+import '../../utils/colors.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -451,6 +451,363 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                 ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void paymentSummaryBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          width: MediaQuery.sizeOf(context).width,
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 30,
+                  height: 3,
+                  color: Colors.black12,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Ringkasan Pembayaran',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 15),
+              Divider(thickness: 0.2),
+              SizedBox(height: 15),
+              Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '1. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Penggunaan voucher hanya akan mengurangi harga product bundling (promo)',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '2. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Perhitungan diskon dihitung dari total nominal pembelian produk tanpa bundling',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '3. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Perhitungan diskon delivery dihitung dari total nominal pembelian produk tanpa bundling setelah dikurangi diskon voucher lainnya.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '4. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Maksmimal nominal diskon digunakan delivery sebesar delivery fee yang telah ditetapkan.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '5.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Jiwa point hanya dapat digunakan maksimal 50% dari nilai Total Tagihan setelah dikurangi oleh voucher yang digunakan tanpa memperhitungkan tarif pengiriman kurir.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void jiwaPointInformationBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height * 0.7,
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 30,
+                  height: 3,
+                  color: Colors.black12,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Informasi Jiwa Point',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 10),
+              Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '1. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Harap ambil pesanan Anda tikda lebih dari 45 menit setelah melakukan order untuk menghindari penurunan kualitas produk.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '2. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Pesanan yang tidak diambil akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '3. ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Tunjukkan kode pick-up kepada staf/barista saat mengambil pesanan anda.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Table(
+                border: TableBorder.all(color: Colors.black, width: 2),
+                columnWidths: const {
+                  0: FlexColumnWidth(2),
+                  1: FlexColumnWidth(2),
+                  2: FlexColumnWidth(2),
+                  3: FlexColumnWidth(2),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  TableRow(
+                    decoration: BoxDecoration(color: AppColors.primary),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          'Level',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          '% Jiwa Point',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          'Limit/Transaksi',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          'Limit/Hari',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                  _buildRow('Jiwa', '2,5%', '5.000', '25.000'),
+                  _buildRow('Teman Sejiwa', '5%', '7.500', '37.500'),
+                  _buildRow('Sahabat Sejiwa', '7,5%', '7.500', '37.500'),
+                  _buildRow('Saudara Sejiwa', '10%', '15.000', '75.000'),
+                  _buildRow('Belahan Jiwa', '15%', '15.000', '75.000'),
+                ],
               ),
             ],
           ),
@@ -1006,9 +1363,12 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                             ),
                             SizedBox(width: 10),
-                            Icon(
-                              Icons.info_outline_rounded,
-                              color: AppColors.primary,
+                            GestureDetector(
+                              onTap: () => paymentSummaryBottomSheet(),
+                              child: Icon(
+                                Icons.info_outline_rounded,
+                                color: AppColors.primary,
+                              ),
                             )
                           ],
                         ),
@@ -1121,9 +1481,12 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                             ),
                             SizedBox(width: 10),
-                            Icon(
-                              Icons.info_outline_rounded,
-                              color: AppColors.primary,
+                            GestureDetector(
+                              onTap: () => jiwaPointInformationBottomSheet(),
+                              child: Icon(
+                                Icons.info_outline_rounded,
+                                color: AppColors.primary,
+                              ),
                             ),
                             Spacer(),
                             Image.asset('assets/cryptocurrency_logo.png',
@@ -1582,6 +1945,46 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  TableRow _buildRow(
+      String level, String persen, String limitTransaksi, String limitHari) {
+    return TableRow(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Text(
+            level,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Text(
+            persen,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Text(
+            limitTransaksi,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Text(
+            limitHari,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+      ],
     );
   }
 }

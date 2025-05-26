@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/address_form_screen.dart';
-import 'package:jiwa_apps/screens/maps_location_screen.dart';
+import 'package:jiwa_apps/screens/profile/address_form_screen.dart';
+import 'package:jiwa_apps/screens/profile/maps_location_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class SearchLocationScreen extends StatelessWidget {

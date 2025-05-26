@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/login_screen.dart';
-import 'package:jiwa_apps/screens/saved_address_screen.dart';
-import 'package:jiwa_apps/screens/update_profile_screen.dart';
+import 'package:jiwa_apps/screens/authentication/login_screen.dart';
+import 'package:jiwa_apps/screens/profile/saved_address_screen.dart';
+import 'package:jiwa_apps/screens/profile/update_profile_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class ProfileScreen extends StatefulWidget {

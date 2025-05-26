@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:jiwa_apps/controllers/auth_controller.dart';
+import 'package:jiwa_apps/screens/authentication/login_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
-import 'package:jiwa_apps/widgets/nav_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
+
+  Get.put(AuthController(), permanent: true);
   runApp(const MainApp());
 }
 
@@ -15,7 +19,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(
         textTheme: GoogleFonts.lexendDecaTextTheme(),
         appBarTheme: AppBarTheme(
@@ -27,7 +31,7 @@ class MainApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.white,
       ),
       debugShowCheckedModeBanner: false,
-      home: NavBar(),
+      home: LoginScreen(),
     );
   }
 }

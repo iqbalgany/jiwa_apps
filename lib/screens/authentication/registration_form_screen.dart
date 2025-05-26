@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jiwa_apps/screens/input_pin_screen.dart';
+import 'package:jiwa_apps/screens/authentication/input_pin_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class RegistrationFormScreen extends StatefulWidget {

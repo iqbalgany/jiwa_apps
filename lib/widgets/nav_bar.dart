@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/home_screen.dart';
-import 'package:jiwa_apps/screens/menu_screen.dart';
-import 'package:jiwa_apps/screens/order_screen.dart';
-import 'package:jiwa_apps/screens/profile_screen.dart';
+import 'package:jiwa_apps/screens/home/home_screen.dart';
+import 'package:jiwa_apps/screens/menu/menu_screen.dart';
+import 'package:jiwa_apps/screens/order/order_screen.dart';
+import 'package:jiwa_apps/screens/profile/profile_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class NavBar extends StatefulWidget {

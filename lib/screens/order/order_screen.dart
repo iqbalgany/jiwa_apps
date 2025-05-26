@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jiwa_apps/screens/detail_order_screen.dart';
+import 'package:jiwa_apps/screens/order/detail_order_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class OrderScreen extends StatefulWidget {

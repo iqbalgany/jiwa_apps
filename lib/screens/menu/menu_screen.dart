@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/detail_menu_screen.dart';
+import 'package:jiwa_apps/screens/menu/detail_menu_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class MenuScreen extends StatelessWidget {

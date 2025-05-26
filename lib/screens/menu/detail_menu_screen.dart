@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/cart_screen.dart';
+import 'package:jiwa_apps/screens/menu/cart_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class DetailMenuScreen extends StatelessWidget {

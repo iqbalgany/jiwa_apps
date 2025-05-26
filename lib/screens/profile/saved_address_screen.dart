@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/address_form_screen.dart';
-import 'package:jiwa_apps/screens/search_location_screen.dart';
+import 'package:jiwa_apps/screens/profile/address_form_screen.dart';
+import 'package:jiwa_apps/screens/profile/search_location_screen.dart';
 
-import '../utils/colors.dart';
+import '../../utils/colors.dart';
 
 class SavedAddressScreen extends StatelessWidget {
   const SavedAddressScreen({super.key});
