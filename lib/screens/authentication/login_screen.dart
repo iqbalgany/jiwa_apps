@@ -2,29 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jiwa_apps/controllers/auth_controller.dart';
-import 'package:jiwa_apps/screens/authentication/registration_form_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
   final AuthController authController = Get.find<AuthController>();
-  final TextEditingController _emailController = TextEditingController();
-
-  bool isChecked = false;
-
-  List<FocusNode> _otpFocusNode = List.generate(4, (index) => FocusNode());
-
-  final List<TextEditingController> _OTPController =
-      List.generate(4, (_) => TextEditingController());
 
   void _verificationBottomSheet(BuildContext context) {
-    _OTPController.forEach((controller) => controller.clear());
+    authController.otpController.forEach((controller) => controller.clear());
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -63,7 +49,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Spacer(),
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      authController.emailController.clear();
+                    },
                     icon: Icon(Icons.close_rounded),
                   ),
                 ],
@@ -81,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     TextSpan(
-                      text: ' qazxswert@gmail.com',
+                      text: authController.emailController.text,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -104,15 +93,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (event is KeyDownEvent &&
                               event.logicalKey ==
                                   LogicalKeyboardKey.backspace &&
-                              _OTPController[index].text.isEmpty &&
+                              authController
+                                  .otpController[index].text.isEmpty &&
                               index > 0) {
-                            _otpFocusNode[index - 1].requestFocus();
+                            authController.otpFocusNode[index - 1]
+                                .requestFocus();
                           }
                         },
                         child: TextField(
                           maxLength: 1,
-                          controller: _OTPController[index],
-                          focusNode: _otpFocusNode[index],
+                          controller: authController.otpController[index],
+                          focusNode: authController.otpFocusNode[index],
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           inputFormatters: [
@@ -130,18 +121,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           onChanged: (value) {
                             if (value.isNotEmpty && index < 3) {
-                              _otpFocusNode[index + 1].requestFocus();
+                              authController.otpFocusNode[index + 1]
+                                  .requestFocus();
                             }
-                            bool isCompleted =
-                                _OTPController.every((c) => c.text.isNotEmpty);
+                            final isCompleted = authController.otpController
+                                .every((c) => c.text.isNotEmpty);
                             if (isCompleted) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      RegistrationFormScreen(),
-                                ),
-                              );
+                              authController.verifyOtp();
                             }
                           },
                         ),
@@ -245,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 20),
                         TextField(
-                          controller: _emailController,
+                          controller: authController.emailController,
                           onChanged: (value) => authController.email = value,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -270,13 +256,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                           children: [
                             Checkbox(
-                              value: isChecked,
+                              value: authController.isChecked,
                               onChanged: (value) {
-                                setState(() {
-                                  isChecked = value!;
-                                });
+                                authController.isChecked = value!;
+                                authController.update();
                               },
-                              activeColor: isChecked ? AppColors.primary : null,
+                              activeColor: authController.isChecked
+                                  ? AppColors.primary
+                                  : null,
                             ),
                             RichText(
                               text: TextSpan(
@@ -315,15 +302,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 10),
                         GestureDetector(
                           onTap: () {
-                            if (isChecked) {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => InputPinScreen(),
-                              //   ),
-                              // );
+                            if (authController.isChecked) {
                               authController.loginwithEmail(
-                                  _emailController.text.trim(),
+                                  authController.emailController.text.trim(),
                                   () => _verificationBottomSheet(context));
                             }
                           },
@@ -331,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: MediaQuery.sizeOf(context).width,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: isChecked
+                              color: authController.isChecked
                                   ? AppColors.primary
                                   : Colors.grey[200],
                               borderRadius: BorderRadius.circular(30),
@@ -342,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: isChecked
+                                  color: authController.isChecked
                                       ? AppColors.white
                                       : Colors.black26,
                                 ),
