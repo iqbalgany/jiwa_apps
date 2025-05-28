@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:jiwa_apps/controllers/auth_controller.dart';
-import 'package:jiwa_apps/screens/authentication/input_pin_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class RegistrationFormScreen extends StatefulWidget {
@@ -24,8 +23,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
       isScrollControlled: true,
       backgroundColor: AppColors.white,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) => Container(
+        return GetBuilder(
+          init: AuthController(),
+          builder: (_) => Container(
             padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
             height: MediaQuery.sizeOf(context).height * 0.9,
             width: MediaQuery.sizeOf(context).width,
@@ -158,8 +158,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
       builder: (
         context,
       ) {
-        return StatefulBuilder(
-          builder: (context, setState) => Container(
+        return GetBuilder(
+          init: AuthController(),
+          builder: (_) => Container(
             padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
             height: MediaQuery.sizeOf(context).height * 0.9,
             width: MediaQuery.sizeOf(context).width,
@@ -197,14 +198,13 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                 ),
                 SizedBox(height: 10),
                 Column(
-                  children: _countries.asMap().entries.map(
+                  children: authController.countries.asMap().entries.map(
                     (entry) {
                       String country = entry.value;
                       return ListTile(
                         onTap: () {
-                          setState(() {
-                            _selectedNationality = country;
-                          });
+                          authController.selectedNationality = country;
+                          authController.update();
                         },
                         contentPadding: EdgeInsets.zero,
                         title: Text(
@@ -223,9 +223,10 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                             shape: BoxShape.circle,
                             color: AppColors.white,
                             border: Border.all(
-                              color: _selectedNationality == country
-                                  ? AppColors.primary
-                                  : Colors.transparent,
+                              color:
+                                  authController.selectedNationality == country
+                                      ? AppColors.primary
+                                      : Colors.transparent,
                               width: 1,
                             ),
                           ),
@@ -234,11 +235,13 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                             width: 10,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: _selectedNationality == country
-                                  ? AppColors.primary
-                                  : Colors.transparent,
+                              color:
+                                  authController.selectedNationality == country
+                                      ? AppColors.primary
+                                      : Colors.transparent,
                               border: Border.all(
-                                color: _selectedNationality == country
+                                color: authController.selectedNationality ==
+                                        country
                                     ? AppColors.primary
                                     : Colors.transparent,
                                 width: 2,
@@ -253,9 +256,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                 Spacer(),
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _citizenshipController.text = _selectedNationality;
-                    });
+                    authController.citizenshipController.text =
+                        authController.selectedNationality;
+                    authController.update();
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -308,11 +311,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _dateController.text =
-                        DateFormat("EEEE, dd MMMM yyyy", "id_ID")
-                            .format(selectDate);
-                  });
+                  authController.dateController.text =
+                      DateFormat("yyyy-MM-dd", "id_ID").format(selectDate);
+                  authController.update();
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -359,11 +360,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     firstDate: DateTime(1900),
                     lastDate: DateTime(2100),
                     onDateChanged: (DateTime newDate) {
-                      setState(() {
-                        _dateController.text =
-                            DateFormat("EEEE, dd MMMM yyyy", "id_ID")
-                                .format(newDate);
-                      });
+                      authController.dateController.text =
+                          DateFormat("yyyy-MM-dd", "id_ID").format(newDate);
+                      authController.update();
                     },
                   ),
                 ),
@@ -405,7 +404,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
     return Scaffold(
       body: GetBuilder(
         init: AuthController(),
-        builder: (controller) => SafeArea(
+        builder: (_) => SafeArea(
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -433,7 +432,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
                   /// KODE REFERRAL
                   TextField(
-                    controller: _referralCodeController,
+                    controller: authController.referralCodeController,
                     decoration: InputDecoration(
                       hintText: 'Kode Referral (Opsional)',
                       hintStyle: TextStyle(
@@ -455,7 +454,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
                   /// NAME
                   TextField(
-                    controller: _nameController,
+                    controller: authController.nameController,
                     decoration: InputDecoration(
                       hintText: 'Nama Kamu *',
                       hintStyle: TextStyle(
@@ -489,20 +488,19 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            _selectedGender = 0;
-                          });
+                          authController.selectedGender = 0;
+                          authController.update();
                         },
                         child: Container(
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _selectedGender == 0
+                            color: authController.selectedGender == 0
                                 ? AppColors.primary
                                 : Colors.transparent,
                             border: Border.all(
-                              color: _selectedGender == 0
+                              color: authController.selectedGender == 0
                                   ? AppColors.primary
                                   : Colors.grey[300]!,
                               width: 2,
@@ -522,20 +520,19 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       SizedBox(width: 30),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            _selectedGender = 1;
-                          });
+                          authController.selectedGender = 1;
+                          authController.update();
                         },
                         child: Container(
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _selectedGender == 1
+                            color: authController.selectedGender == 1
                                 ? AppColors.primary
                                 : Colors.transparent,
                             border: Border.all(
-                              color: _selectedGender == 1
+                              color: authController.selectedGender == 1
                                   ? AppColors.primary
                                   : Colors.grey[300]!,
                               width: 2,
@@ -558,7 +555,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
                   /// DATE OF BIRTH
                   TextField(
-                    controller: _dateController,
+                    controller: authController.dateController,
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.calendar_month_outlined),
                       hintText: 'Tanggal Lahir *',
@@ -575,7 +572,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
                   /// NUMBER
                   TextField(
-                    controller: _numberController,
+                    controller: authController.numberController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'Nomor Telepon',
@@ -598,7 +595,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
                   /// CITIZENSHIP
                   TextField(
-                    controller: _citizenshipController,
+                    controller: authController.citizenshipController,
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.arrow_drop_down_sharp),
                       hintText: 'Kewarganegaraan',
@@ -615,7 +612,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
                   /// JOB
                   TextField(
-                    controller: _jobController,
+                    controller: authController.jobController,
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.arrow_drop_down_sharp),
                       hintText: 'Pekerjaan',
@@ -633,10 +630,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   /// BUTTON
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InputPinScreen()));
+                      authController.registerUser();
                     },
                     child: Container(
                       height: 60,

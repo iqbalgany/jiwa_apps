@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwa_apps/screens/authentication/input_pin_screen.dart';
 import 'package:jiwa_apps/screens/authentication/registration_form_screen.dart';
-import 'package:jiwa_apps/screens/home/home_screen.dart';
 import 'package:jiwa_apps/services/auth_service.dart';
 import 'package:jiwa_apps/widgets/nav_bar.dart';
 
@@ -21,8 +20,8 @@ class AuthController extends GetxController {
   int? selectedGender = 0;
 
   final Map<int, String> genderLabels = {
-    0: 'Laki-laki',
-    1: 'Perempuan',
+    0: 'Male',
+    1: 'Female',
   };
 
   final List<String> countries = [
@@ -113,18 +112,18 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> loginWithPin() async {
+  Future<void> handlePinAction() async {
     final pinCode = fullPin;
     final email = _emailController.text;
 
     isLoading = true;
     update();
 
-    final result = await _authService.pinLogin(
-      token: token,
-      email: email,
-      pinCode: pinCode,
-    );
+    final result = isRegistered
+        ? await _authService.pinLogin(
+            token: token, email: email, pinCode: pinCode)
+        : await _authService.creatPin(
+            token: token, email: email, pinCode: pinCode);
 
     isLoading = false;
     update();
@@ -132,7 +131,7 @@ class AuthController extends GetxController {
     if (result['status'] == 'success') {
       // final newToken = result['token'];
 
-      Get.offAll(() => HomeScreen());
+      Get.offAll(() => NavBar());
     } else if (result['status'] == 'error') {
       Get.snackbar('Login Gagal', message);
     }
@@ -157,7 +156,7 @@ class AuthController extends GetxController {
 
   Future<void> registerUser() async {
     final name = nameController.text;
-    final gender = nameController.text;
+    final gender = genderLabels[selectedGender];
     final dateOfBirth = dateController.text;
     final region = citizenshipController.text;
     final job = jobController.text;
@@ -167,7 +166,7 @@ class AuthController extends GetxController {
     final result = await _authService.registerUser(
       token: token,
       name: name,
-      gender: gender,
+      gender: gender.toString(),
       dateOfBirth: dateOfBirth,
       email: email,
       region: region,
@@ -177,24 +176,9 @@ class AuthController extends GetxController {
     );
 
     if (result['status'] == 'success') {
-      Get.offAll(() => NavBar());
+      Get.offAll(() => InputPinScreen());
     } else if (result['status'] == 'error') {
       Get.snackbar('Registrasi Gagal', message);
     }
-  }
-
-  void setNationality(String value) {
-    selectedNationality = value;
-    update();
-  }
-
-  void setJob(String value) {
-    selectedJob = value;
-    update();
-  }
-
-  void setGender(int value) {
-    selectedGender = value;
-    update();
   }
 }

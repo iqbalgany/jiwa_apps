@@ -98,7 +98,7 @@ class InputPinScreen extends StatelessWidget {
 
                           if (isComplete) {
                             FocusScope.of(context).unfocus();
-                            authController.loginWithPin();
+                            authController.handlePinAction();
                           }
                         },
                       ),

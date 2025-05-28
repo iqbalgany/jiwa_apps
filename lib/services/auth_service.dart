@@ -115,4 +115,33 @@ class AuthService {
       };
     }
   }
+
+  Future<Map<String, dynamic>> creatPin({
+    required String token,
+    required String email,
+    required String pinCode,
+  }) async {
+    try {
+      final response = await DioClient.instance.post(
+        '/auth/create-pin',
+        data: FormData.fromMap({
+          'email': email,
+          'pin_code': pinCode,
+        }),
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      return {
+        'status': 'error',
+        'message': e.response?.data['message'] ?? 'Terjadi kesalahan',
+      };
+    }
+  }
 }
