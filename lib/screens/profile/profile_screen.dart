@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa_apps/screens/authentication/login_screen.dart';
+import 'package:get/get.dart';
 import 'package:jiwa_apps/screens/profile/saved_address_screen.dart';
 import 'package:jiwa_apps/screens/profile/update_profile_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+import '../../controllers/auth_controller.dart';
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
+class ProfileScreen extends StatelessWidget {
+  ProfileScreen({super.key});
 
-class _ProfileScreenState extends State<ProfileScreen> {
+  final AuthController authController = Get.find<AuthController>();
+
   void showTermsOfServiceBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -119,271 +118,279 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.greyBG,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 20,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// HEADER
-              Text(
-                'JIWA+',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 40,
-                  color: AppColors.primary,
-                ),
+    final user = authController.user;
+    if (user == null) {
+      return const Center(child: Text('Tidak ada data pengguna'));
+    }
+    return GetBuilder<AuthController>(
+      init: AuthController(),
+      builder: (_) {
+        return Scaffold(
+          backgroundColor: AppColors.greyBG,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 20,
               ),
-              SizedBox(height: 20),
-
-              /// PROFILE
-              Container(
-                width: MediaQuery.sizeOf(context).width,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.person_outline,
-                      color: AppColors.secondary,
-                      size: 60,
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Muhammad Iqbal Al Afgany',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: AppColors.secondary,
-                          ),
-                        ),
-                        Text(
-                          '6281234567890',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: AppColors.greyText,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UpdateProfileScreen()));
-                      },
-                      icon: Icon(
-                        Icons.edit_outlined,
-                        color: AppColors.secondary,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-
-              /// REFERRAL CODE
-              Stack(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: MediaQuery.sizeOf(context).width,
-                    padding: EdgeInsets.fromLTRB(20, 50, 20, 10),
-                    decoration: BoxDecoration(
-                        color: AppColors.purplepastel,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Row(
-                      children: [
-                        Text(
-                          'MK5US6',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 30,
-                            color: AppColors.whiteText,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.file_copy_outlined,
-                            color: AppColors.whiteText,
-                            size: 17,
-                          ),
-                        ),
-                        Spacer(),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.share_outlined,
-                            color: AppColors.whiteText,
-                            size: 40,
-                          ),
-                        )
-                      ],
+                  /// HEADER
+                  Text(
+                    'JIWA+',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 40,
+                      color: AppColors.primary,
                     ),
                   ),
+                  SizedBox(height: 20),
+
+                  /// PROFILE
                   Container(
                     width: MediaQuery.sizeOf(context).width,
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: AppColors.secondary,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(20)),
-                    child: Center(
-                      child: Text(
-                        'Undang teman dan dapatkan voucher 50%',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: AppColors.white,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person_outline,
+                          color: AppColors.secondary,
+                          size: 60,
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              user.name ?? '-',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                            Text(
+                              '-',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: AppColors.greyText,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UpdateProfileScreen()));
+                          },
+                          icon: Icon(
+                            Icons.edit_outlined,
+                            color: AppColors.secondary,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+
+                  /// REFERRAL CODE
+                  Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.sizeOf(context).width,
+                        padding: EdgeInsets.fromLTRB(20, 50, 20, 10),
+                        decoration: BoxDecoration(
+                            color: AppColors.purplepastel,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          children: [
+                            Text(
+                              user.referralCode ?? '-',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 30,
+                                color: AppColors.whiteText,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.file_copy_outlined,
+                                color: AppColors.whiteText,
+                                size: 17,
+                              ),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.share_outlined,
+                                color: AppColors.whiteText,
+                                size: 40,
+                              ),
+                            )
+                          ],
                         ),
                       ),
+                      Container(
+                        width: MediaQuery.sizeOf(context).width,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: AppColors.secondary,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                          child: Text(
+                            'Undang teman dan dapatkan voucher 50%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+
+                  /// ITEM
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      children: [
+                        profileItem(
+                          icon: Icons.percent_rounded,
+                          text: 'Subscription',
+                        ),
+                        Divider(),
+                        profileItem(
+                          icon: Icons.event_note_outlined,
+                          text: 'Riwayat Pesanan',
+                        ),
+                        Divider(),
+                        profileItem(
+                          icon: Icons.location_on_outlined,
+                          text: 'Alamat Tersimpan',
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SavedAddressScreen()));
+                          },
+                        ),
+                        Divider(),
+                        profileItem(
+                          icon: Icons.discount_outlined,
+                          text: 'Voucher',
+                        ),
+                        Divider(),
+                        profileItem(
+                          icon: Icons.handshake_outlined,
+                          text: 'Loyality Membership',
+                        ),
+                        Divider(),
+                        profileItem(
+                          icon: Icons.share_outlined,
+                          text: 'Referral',
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 30),
+                  SizedBox(height: 20),
 
-              /// ITEM
-              Container(
-                width: MediaQuery.sizeOf(context).width,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 20,
-                ),
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  children: [
-                    profileItem(
-                      icon: Icons.percent_rounded,
-                      text: 'Subscription',
+                  /// HELPER
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
                     ),
-                    Divider(),
-                    profileItem(
-                      icon: Icons.event_note_outlined,
-                      text: 'Riwayat Pesanan',
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      children: [
+                        profileItem(
+                          icon: Icons.support_agent_rounded,
+                          text: 'Jiwa Care',
+                        ),
+                        Divider(),
+                        profileItem(
+                          icon: Icons.security_rounded,
+                          text: 'Kebijakan Privasi',
+                          onTap: () => showTermsOfServiceBottomSheet(context),
+                        ),
+                        Divider(),
+                        profileItem(
+                            icon: Icons.output_rounded,
+                            text: 'Keluar',
+                            onTap: () {
+                              authController.logout();
+                            }),
+                      ],
                     ),
-                    Divider(),
-                    profileItem(
-                      icon: Icons.location_on_outlined,
-                      text: 'Alamat Tersimpan',
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SavedAddressScreen()));
-                      },
-                    ),
-                    Divider(),
-                    profileItem(
-                      icon: Icons.discount_outlined,
-                      text: 'Voucher',
-                    ),
-                    Divider(),
-                    profileItem(
-                      icon: Icons.handshake_outlined,
-                      text: 'Loyality Membership',
-                    ),
-                    Divider(),
-                    profileItem(
-                      icon: Icons.share_outlined,
-                      text: 'Referral',
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
+                  ),
+                  SizedBox(height: 20),
 
-              /// HELPER
-              Container(
-                width: MediaQuery.sizeOf(context).width,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 20,
-                ),
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  children: [
-                    profileItem(
-                      icon: Icons.support_agent_rounded,
-                      text: 'Jiwa Care',
-                    ),
-                    Divider(),
-                    profileItem(
-                      icon: Icons.security_rounded,
-                      text: 'Kebijakan Privasi',
-                      onTap: () => showTermsOfServiceBottomSheet(context),
-                    ),
-                    Divider(),
-                    profileItem(
-                      icon: Icons.output_rounded,
-                      text: 'Keluar',
-                      onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                        (Route<dynamic> route) => false,
+                  /// APPS VERSION
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Versi Aplikasi 3.8.4 (10047)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.black26,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-
-              /// APPS VERSION
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Versi Aplikasi 3.8.4 (10047)',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: Colors.black26,
                   ),
-                ),
-              ),
-              SizedBox(height: 30),
+                  SizedBox(height: 30),
 
-              /// DITJEN PKTN
-              Text(
-                'Informasi Kontak Layanan Pengaduan Konsumen Direktorat Jenderal Perlindugan Konsumen dan Tertib Niaga,\nKementrian Perdagangan republik Indonesia',
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 6.5,
-                  color: Colors.black45,
-                ),
+                  /// DITJEN PKTN
+                  Text(
+                    'Informasi Kontak Layanan Pengaduan Konsumen Direktorat Jenderal Perlindugan Konsumen dan Tertib Niaga,\nKementrian Perdagangan republik Indonesia',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 6.5,
+                      color: Colors.black45,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Whatsapp Ditjen PKTN : 0853-1111-1010',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 80),
+                ],
               ),
-              SizedBox(height: 10),
-              Text(
-                'Whatsapp Ditjen PKTN : 0853-1111-1010',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 11,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 80),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

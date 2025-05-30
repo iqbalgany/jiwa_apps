@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jiwa_apps/models/user_model..dart';
 import 'package:jiwa_apps/screens/authentication/input_pin_screen.dart';
+import 'package:jiwa_apps/screens/authentication/login_screen.dart';
 import 'package:jiwa_apps/screens/authentication/registration_form_screen.dart';
 import 'package:jiwa_apps/services/auth_service.dart';
+import 'package:jiwa_apps/services/storage_service.dart';
 import 'package:jiwa_apps/widgets/nav_bar.dart';
 
 class AuthController extends GetxController {
@@ -14,10 +17,22 @@ class AuthController extends GetxController {
   final TextEditingController numberController = TextEditingController();
   final TextEditingController citizenshipController = TextEditingController();
   final TextEditingController jobController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  List<TextEditingController> get pinController => _pinController;
 
+  String email = '';
+  String message = '';
+  String? errorMessage;
+  String token = '';
+  bool isLoading = false;
+  bool isRegistered = false;
+  bool isChecked = false;
   String selectedNationality = '';
   String selectedJob = '';
   int? selectedGender = 0;
+  UserModel? _user;
+
+  UserModel? get user => _user;
 
   final Map<int, String> genderLabels = {
     0: 'Male',
@@ -42,15 +57,6 @@ class AuthController extends GetxController {
     'Lainnya',
   ];
 
-  String email = '';
-  String message = '';
-  String token = '';
-  bool isLoading = false;
-  bool isRegistered = false;
-  bool isChecked = false;
-
-  final TextEditingController _emailController = TextEditingController();
-
   final List<FocusNode> _otpFocusNode =
       List.generate(4, (index) => FocusNode());
   final List<TextEditingController> _otpController =
@@ -60,7 +66,6 @@ class AuthController extends GetxController {
       List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _pinFocusNode = List.generate(6, (_) => FocusNode());
 
-  List<TextEditingController> get pinController => _pinController;
   List<FocusNode> get pinFocusNode => _pinFocusNode;
 
   String get fullPin => _pinController.map((e) => e.text).join();
@@ -88,26 +93,24 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> loginwithEmail(String email, Function onSuccess) async {
+  Future<void> loginwithEmail(
+    String email,
+    Function onSuccess,
+  ) async {
     isLoading = true;
     update();
 
     final result = await _authService.loginWithEmail(email);
 
     isLoading = false;
-    message = result['message'];
+    message = result.data['message'];
+    isRegistered = result.data['is_registered'];
+    update();
 
-    if (result['success']) {
-      isRegistered = result['is_registered'];
-      update();
-
-      if (isRegistered) {
-        Get.to(InputPinScreen());
-      } else {
-        onSuccess();
-      }
-    } else {
-      Get.snackbar('Login Gagal', message);
+    if (isRegistered) {
+      Get.to(InputPinScreen());
+    } else if (!isRegistered) {
+      onSuccess();
       update();
     }
   }
@@ -126,15 +129,14 @@ class AuthController extends GetxController {
             token: token, email: email, pinCode: pinCode);
 
     isLoading = false;
-    update();
 
-    if (result['status'] == 'success') {
-      // final newToken = result['token'];
-
+    if (result!.data['status'] == 'success') {
+      await StorageService.saveToken(result.data['token']);
       Get.offAll(() => NavBar());
-    } else if (result['status'] == 'error') {
+    } else if (result.data['status'] == 'error') {
       Get.snackbar('Login Gagal', message);
     }
+    update();
   }
 
   Future<void> verifyOtp() async {
@@ -147,9 +149,9 @@ class AuthController extends GetxController {
       otp: otp,
     );
 
-    if (result['status'] == 'success') {
+    if (result.data['status'] == 'success') {
       Get.offAll(() => RegistrationFormScreen());
-    } else if (result['status'] == 'error') {
+    } else if (result.data['status'] == 'error') {
       Get.snackbar('Login Gagal', message);
     }
   }
@@ -175,10 +177,47 @@ class AuthController extends GetxController {
       referralCode: referralCode,
     );
 
-    if (result['status'] == 'success') {
+    if (result!.data['status'] == 'success') {
       Get.offAll(() => InputPinScreen());
-    } else if (result['status'] == 'error') {
+    } else if (result.data['status'] == 'error') {
       Get.snackbar('Registrasi Gagal', message);
+    }
+  }
+
+  Future<void> logout() async {
+    isLoading = true;
+    update();
+
+    final success = await _authService.logout();
+
+    isLoading = false;
+
+    if (success) {
+      _emailController.clear();
+      isChecked = false;
+      _pinController.forEach((controller) => controller.clear());
+      await StorageService.removeToken();
+      Get.offAll(() => LoginScreen());
+    } else if (!success) {
+      Get.snackbar('Gagal logout.', message);
+    }
+    update();
+  }
+
+  Future<void> getUserData() async {
+    isLoading = true;
+    update();
+
+    UserModel? fetchedUser = await _authService.fetchUserProfile();
+
+    isLoading = false;
+    update();
+
+    if (fetchedUser != null) {
+      _user = fetchedUser;
+      update();
+    } else {
+      Get.snackbar('Gagal mengambil data pengguna.', message);
     }
   }
 }

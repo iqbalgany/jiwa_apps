@@ -10,8 +10,9 @@ class UserModel {
   final DateTime? dateOfBirth;
   final String? region;
   final String? job;
-  final dynamic referralCode;
-  final dynamic referralBy;
+  final String? phoneNumber;
+  final String? referralCode;
+  final dynamic referredBy;
 
   UserModel({
     this.id,
@@ -25,46 +26,56 @@ class UserModel {
     this.dateOfBirth,
     this.region,
     this.job,
+    this.phoneNumber,
     this.referralCode,
-    this.referralBy,
+    this.referredBy,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
-        name: json["name"],
+        name: json["name"] ?? "Unknown", // Default value if null
         email: json["email"],
         emailVerifiedAt: json["email_verified_at"],
         rememberToken: json["remember_token"],
         createdAt: json["created_at"] == null
             ? null
-            : DateTime.parse(json["created_at"]),
+            : DateTime.tryParse(json["created_at"]) ?? DateTime.now(),
         updatedAt: json["updated_at"] == null
             ? null
-            : DateTime.parse(json["updated_at"]),
-        gender: json["gender"],
+            : DateTime.tryParse(json["updated_at"]) ?? DateTime.now(),
+        gender: json["gender"] ?? "Not specified", // Default value if null
         dateOfBirth: json["date_of_birth"] == null
             ? null
-            : DateTime.parse(json["date_of_birth"]),
-        region: json["region"],
-        job: json["job"],
-        referralCode: json["referral_code"],
-        referralBy: json["referral_by"],
+            : DateTime.tryParse(json["date_of_birth"]),
+        region: json["region"] ?? "Unknown", // Default value if null
+        job: json["job"] ?? "Not specified", // Default value if null
+        phoneNumber:
+            json["phone_number"] ?? "No phone number", // Default value if null
+        referralCode:
+            json["referral_code"] ?? "No referral", // Default value if null
+        referredBy: json["referred_by"] ?? "None", // Default value if null
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "email": email,
-        "email_verified_at": emailVerifiedAt,
-        "remember_token": rememberToken,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "gender": gender,
-        "date_of_birth":
-            "${dateOfBirth!.year.toString().padLeft(4, '0')}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}",
-        "region": region,
-        "job": job,
-        "referral_code": referralCode,
-        "referral_by": referralBy,
-      };
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    if (id != null) data["id"] = id;
+    if (name != null) data["name"] = name;
+    if (email != null) data["email"] = email;
+    if (emailVerifiedAt != null) data["email_verified_at"] = emailVerifiedAt;
+    if (rememberToken != null) data["remember_token"] = rememberToken;
+    if (createdAt != null) data["created_at"] = createdAt?.toIso8601String();
+    if (updatedAt != null) data["updated_at"] = updatedAt?.toIso8601String();
+    if (gender != null) data["gender"] = gender;
+    if (dateOfBirth != null) {
+      data["date_of_birth"] =
+          "${dateOfBirth!.year.toString().padLeft(4, '0')}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}";
+    }
+    if (region != null) data["region"] = region;
+    if (job != null) data["job"] = job;
+    if (phoneNumber != null) data["phone_number"] = phoneNumber;
+    if (referralCode != null) data["referral_code"] = referralCode;
+    if (referredBy != null) data["referred_by"] = referredBy;
+
+    return data;
+  }
 }

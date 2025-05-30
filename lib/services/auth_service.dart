@@ -1,38 +1,34 @@
 import 'package:dio/dio.dart';
 import 'package:jiwa_apps/helpers/dio_client.dart';
+import 'package:jiwa_apps/models/user_model..dart';
+import 'package:jiwa_apps/services/storage_service.dart';
 
 class AuthService {
-  Future<Map<String, dynamic>> loginWithEmail(String email) async {
+  Future<Response> loginWithEmail(String email) async {
     try {
-      final response = await DioClient.instance.post('/auth/login', data: {
+      final Response response =
+          await DioClient.instance.post('/auth/login', data: {
         'email': email,
       });
 
-      return {
-        'success': true,
-        'message': response.data['message'],
-        'is_registered': response.data['is_registered'],
-      };
-    } on DioException catch (e) {
-      return {
-        'success': false,
-        'message': e.response?.data['message'] ?? 'Terjadi kesalahan',
-      };
+      return response;
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>> pinLogin({
+  Future<Response> pinLogin({
     required String token,
     required String email,
     required String pinCode,
   }) async {
     try {
-      final response = await DioClient.instance.post(
+      final Response response = await DioClient.instance.post(
         '/auth/pin-login',
-        data: FormData.fromMap({
+        data: {
           'email': email,
           'pin_code': pinCode,
-        }),
+        },
         options: Options(
           headers: {
             'Accept': 'application/json',
@@ -42,15 +38,12 @@ class AuthService {
       );
 
       return response.data;
-    } on DioException catch (e) {
-      return {
-        'status': 'error',
-        'message': e.response?.data['message'] ?? 'Terjadi kesalahan',
-      };
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>> verifyOtp({
+  Future<Response> verifyOtp({
     required String token,
     required String email,
     required String otp,
@@ -70,16 +63,13 @@ class AuthService {
         ),
       );
 
-      return response.data;
-    } on DioException catch (e) {
-      return {
-        'status': 'error',
-        'message': e.response?.data['message'] ?? 'Terjadi kesalahan',
-      };
+      return response;
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>> registerUser({
+  Future<Response?> registerUser({
     required String token,
     required String name,
     required String gender,
@@ -93,30 +83,30 @@ class AuthService {
     try {
       final response = await DioClient.instance.post(
         '/auth/register',
-        data: FormData.fromMap(
-          {
-            'name': name,
-            'gender': gender,
-            'date_of_birth': dateOfBirth,
-            'email': email,
-            'region': region,
-            'job': job,
-            'phone_number': phoneNumber,
-            'referral_code': referralCode ?? '',
+        options: Options(
+          headers: {
+            "Accept": "application/json",
           },
         ),
+        data: {
+          'name': name,
+          'gender': gender,
+          'date_of_birth': dateOfBirth,
+          'email': email,
+          'region': region,
+          'job': job,
+          'phone_number': phoneNumber,
+          'referral_code': referralCode ?? '',
+        },
       );
 
-      return response.data;
-    } on DioException catch (e) {
-      return {
-        'status': 'error',
-        'message': e.response?.data['message'] ?? 'Terjadi kesalahan',
-      };
+      return response.data['data'];
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>> creatPin({
+  Future<Response?> creatPin({
     required String token,
     required String email,
     required String pinCode,
@@ -124,10 +114,10 @@ class AuthService {
     try {
       final response = await DioClient.instance.post(
         '/auth/create-pin',
-        data: FormData.fromMap({
+        data: {
           'email': email,
           'pin_code': pinCode,
-        }),
+        },
         options: Options(
           headers: {
             'Accept': 'application/json',
@@ -137,11 +127,57 @@ class AuthService {
       );
 
       return response.data;
-    } on DioException catch (e) {
-      return {
-        'status': 'error',
-        'message': e.response?.data['message'] ?? 'Terjadi kesalahan',
-      };
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> logout() async {
+    final token = await StorageService.getToken();
+
+    try {
+      final response = await DioClient.instance.post(
+        '/auth/logout',
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        await StorageService.removeToken();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<UserModel?> fetchUserProfile() async {
+    final token = await StorageService.getToken();
+
+    try {
+      final Response response = await DioClient.instance.get(
+        '/auth/me',
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.data['data'] != null && response.data != null) {
+        return UserModel.fromJson(response.data['data']);
+      } else {
+        return UserModel.fromJson(response.data['data']);
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch user data: $e');
     }
   }
 }

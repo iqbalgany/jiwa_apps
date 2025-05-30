@@ -33,7 +33,7 @@ class _NavBarState extends State<NavBar> {
         return const OrderScreen();
 
       case 3:
-        return const ProfileScreen();
+        return ProfileScreen();
 
       default:
         return const HomeScreen();
