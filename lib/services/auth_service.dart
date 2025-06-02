@@ -37,7 +37,12 @@ class AuthService {
         ),
       );
 
-      return response.data;
+      final responseData = response.data;
+      if (responseData['status '] == 'success' &&
+          responseData['token'] != null) {
+        await StorageService.saveToken(responseData['token']);
+      }
+      return response;
     } catch (e) {
       rethrow;
     }
@@ -100,7 +105,7 @@ class AuthService {
         },
       );
 
-      return response.data['data'];
+      return response;
     } catch (e) {
       rethrow;
     }
@@ -126,7 +131,13 @@ class AuthService {
         ),
       );
 
-      return response.data;
+      final responseData = response.data;
+      if (responseData['status'] == 'success' &&
+          responseData['token'] != null) {
+        await StorageService.saveToken(responseData['token']);
+      }
+
+      return response;
     } catch (e) {
       rethrow;
     }
@@ -160,6 +171,10 @@ class AuthService {
   Future<UserModel?> fetchUserProfile() async {
     final token = await StorageService.getToken();
 
+    if (token == null) {
+      throw Exception('Token tidak tersedia. Harap login kembali.');
+    }
+
     try {
       final Response response = await DioClient.instance.get(
         '/auth/me',
@@ -171,13 +186,45 @@ class AuthService {
         ),
       );
 
-      if (response.data['data'] != null && response.data != null) {
+      final data = response.data['data'];
+      if (data != null) {
         return UserModel.fromJson(response.data['data']);
       } else {
-        return UserModel.fromJson(response.data['data']);
+        throw Exception('Data pengguna tidak ditemukan dalam respons.');
       }
     } catch (e) {
       throw Exception('Failed to fetch user data: $e');
     }
+  }
+
+  Future<Response> editProfile({
+    required String name,
+    required String gender,
+    required String dateOfBirth,
+    required String region,
+    required String job,
+    required String phoneNumber,
+  }) async {
+    final token = await StorageService.getToken();
+
+    final response = await DioClient.instance.post(
+      '/auth/edit-profile',
+      options: Options(
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+      data: {
+        'name': name,
+        'gender': gender,
+        'date_of_birth': dateOfBirth,
+        'region': region,
+        'job': job,
+        'phone_number': phoneNumber,
+      },
+    );
+
+    return response;
   }
 }

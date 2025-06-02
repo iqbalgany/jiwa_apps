@@ -93,6 +93,12 @@ class AuthController extends GetxController {
     }
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    getUserData();
+  }
+
   Future<void> loginwithEmail(
     String email,
     Function onSuccess,
@@ -120,22 +126,32 @@ class AuthController extends GetxController {
     final email = _emailController.text;
 
     isLoading = true;
-    update();
 
-    final result = isRegistered
-        ? await _authService.pinLogin(
-            token: token, email: email, pinCode: pinCode)
-        : await _authService.creatPin(
-            token: token, email: email, pinCode: pinCode);
+    try {
+      final result = isRegistered
+          ? await _authService.pinLogin(
+              token: token, email: email, pinCode: pinCode)
+          : await _authService.creatPin(
+              token: token, email: email, pinCode: pinCode);
 
-    isLoading = false;
+      isLoading = false;
 
-    if (result!.data['status'] == 'success') {
-      await StorageService.saveToken(result.data['token']);
-      Get.offAll(() => NavBar());
-    } else if (result.data['status'] == 'error') {
-      Get.snackbar('Login Gagal', message);
+      if (result != null && result.data['status'] == 'success') {
+        final newToken = result.data['token'];
+        if (newToken != null) {
+          await StorageService.saveToken(result.data['token']);
+          Get.offAll(() => NavBar());
+        } else {
+          Get.snackbar('Error', 'Token tidak ditemukan di respons');
+        }
+      } else {
+        Get.snackbar('Login Gagal', 'Terjadi kesalahan saat login');
+      }
+    } catch (e) {
+      isLoading = false;
+      Get.snackbar('Error', 'Terjadi kesalahan: ${e.toString()}');
     }
+
     update();
   }
 
@@ -157,24 +173,16 @@ class AuthController extends GetxController {
   }
 
   Future<void> registerUser() async {
-    final name = nameController.text;
-    final gender = genderLabels[selectedGender];
-    final dateOfBirth = dateController.text;
-    final region = citizenshipController.text;
-    final job = jobController.text;
-    final phoneNumber = numberController.text;
-    final referralCode = referralCodeController.text;
-
     final result = await _authService.registerUser(
       token: token,
-      name: name,
-      gender: gender.toString(),
-      dateOfBirth: dateOfBirth,
+      name: nameController.text,
+      gender: genderLabels[selectedGender].toString(),
+      dateOfBirth: dateController.text,
       email: email,
-      region: region,
-      job: job,
-      phoneNumber: phoneNumber,
-      referralCode: referralCode,
+      region: citizenshipController.text,
+      job: jobController.text,
+      phoneNumber: numberController.text,
+      referralCode: referralCodeController.text,
     );
 
     if (result!.data['status'] == 'success') {
@@ -208,16 +216,50 @@ class AuthController extends GetxController {
     isLoading = true;
     update();
 
-    UserModel? fetchedUser = await _authService.fetchUserProfile();
+    try {
+      UserModel? fetchedUser = await _authService.fetchUserProfile();
 
-    isLoading = false;
+      if (fetchedUser != null) {
+        _user = fetchedUser;
+        update();
+      } else {
+        Get.snackbar('Gagal mengambil data pengguna.',
+            'Data tidak tersedia dari server ');
+      }
+    } catch (e) {
+      Get.snackbar('Error',
+          'Terjadi kesalahan saat mengambil data pengguna: ${e.toString()}');
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<void> submitEditProfile() async {
+    isLoading = true;
     update();
 
-    if (fetchedUser != null) {
-      _user = fetchedUser;
+    try {
+      final response = await _authService.editProfile(
+        name: nameController.text,
+        gender: genderLabels[selectedGender].toString(),
+        dateOfBirth: dateController.text,
+        region: citizenshipController.text,
+        job: jobController.text,
+        phoneNumber: numberController.text,
+      );
+
+      if (response.statusCode == 200) {
+        Get.snackbar('Success', 'Profile berhasil diupdate');
+        getUserData();
+      } else {
+        Get.snackbar('Error', 'Gagal mengupdate profile');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Terjadi kesalahan: $e');
+    } finally {
+      isLoading = false;
       update();
-    } else {
-      Get.snackbar('Gagal mengambil data pengguna.', message);
     }
   }
 }

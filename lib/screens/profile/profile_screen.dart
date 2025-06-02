@@ -123,7 +123,9 @@ class ProfileScreen extends StatelessWidget {
       return const Center(child: Text('Tidak ada data pengguna'));
     }
     return GetBuilder<AuthController>(
-      init: AuthController(),
+      initState: (_) {
+        authController.getUserData();
+      },
       builder: (_) {
         return Scaffold(
           backgroundColor: AppColors.greyBG,
@@ -175,7 +177,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '-',
+                              user.phoneNumber ?? '-',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,

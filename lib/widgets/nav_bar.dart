@@ -6,19 +6,38 @@ import 'package:jiwa_apps/screens/profile/profile_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({super.key});
+  final int page;
+  const NavBar({super.key, this.page = 0});
 
   @override
   State<NavBar> createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-  int currentIndex = 0;
+  late int currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.page;
+  }
 
   void onTabTapped(int index) {
     setState(() {
       currentIndex = index;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          buildContext(currentIndex),
+          customNavBar(context),
+        ],
+      ),
+    );
   }
 
   Widget buildContext(int currentIndex) {
@@ -38,18 +57,6 @@ class _NavBarState extends State<NavBar> {
       default:
         return const HomeScreen();
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          buildContext(currentIndex),
-          customNavBar(context),
-        ],
-      ),
-    );
   }
 
   Widget customNavBar(BuildContext context) {

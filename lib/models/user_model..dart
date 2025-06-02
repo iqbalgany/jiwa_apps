@@ -33,7 +33,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
-        name: json["name"] ?? "Unknown", // Default value if null
+        name: json["name"] ?? "Unknown",
         email: json["email"],
         emailVerifiedAt: json["email_verified_at"],
         rememberToken: json["remember_token"],
@@ -43,17 +43,15 @@ class UserModel {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.tryParse(json["updated_at"]) ?? DateTime.now(),
-        gender: json["gender"] ?? "Not specified", // Default value if null
+        gender: json["gender"] ?? "Not specified",
         dateOfBirth: json["date_of_birth"] == null
             ? null
             : DateTime.tryParse(json["date_of_birth"]),
-        region: json["region"] ?? "Unknown", // Default value if null
-        job: json["job"] ?? "Not specified", // Default value if null
-        phoneNumber:
-            json["phone_number"] ?? "No phone number", // Default value if null
-        referralCode:
-            json["referral_code"] ?? "No referral", // Default value if null
-        referredBy: json["referred_by"] ?? "None", // Default value if null
+        region: json["region"] ?? "Unknown",
+        job: json["job"] ?? "Not specified",
+        phoneNumber: json["phone_number"] ?? "No phone number",
+        referralCode: json["referral_code"] ?? "No referral",
+        referredBy: json["referred_by"] ?? "None",
       );
 
   Map<String, dynamic> toJson() {
