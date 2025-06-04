@@ -7,9 +7,7 @@ import 'package:jiwa_apps/utils/colors.dart';
 import '../../controllers/auth_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
-
-  final AuthController authController = Get.find<AuthController>();
+  const ProfileScreen({super.key});
 
   void showTermsOfServiceBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -434,3 +432,5 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+
+final AuthController authController = Get.find<AuthController>();

@@ -97,6 +97,40 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     getUserData();
+    for (var c in _pinController) {
+      c.clear();
+    }
+    for (var c in _otpController) {
+      c.clear();
+    }
+  }
+
+  @override
+  void onClose() {
+    for (final controller in _pinController) {
+      controller.dispose();
+    }
+
+    for (final focusNode in _pinFocusNode) {
+      focusNode.dispose();
+    }
+
+    for (final controller in _otpController) {
+      controller.dispose();
+    }
+    for (final focusNode in _otpFocusNode) {
+      focusNode.dispose();
+    }
+
+    referralCodeController.dispose();
+    nameController.dispose();
+    dateController.dispose();
+    numberController.dispose();
+    citizenshipController.dispose();
+    jobController.dispose();
+    _emailController.dispose();
+
+    super.onClose();
   }
 
   Future<void> loginwithEmail(
@@ -203,7 +237,6 @@ class AuthController extends GetxController {
     if (success) {
       _emailController.clear();
       isChecked = false;
-      _pinController.forEach((controller) => controller.clear());
       await StorageService.removeToken();
       Get.offAll(() => LoginScreen());
     } else if (!success) {
@@ -221,7 +254,6 @@ class AuthController extends GetxController {
 
       if (fetchedUser != null) {
         _user = fetchedUser;
-        update();
       } else {
         Get.snackbar('Gagal mengambil data pengguna.',
             'Data tidak tersedia dari server ');
@@ -250,13 +282,50 @@ class AuthController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        Get.snackbar('Success', 'Profile berhasil diupdate');
-        getUserData();
+        await getUserData();
+        Get.offAll(() => NavBar(page: 3));
       } else {
         Get.snackbar('Error', 'Gagal mengupdate profile');
       }
     } catch (e) {
       Get.snackbar('Error', 'Terjadi kesalahan: $e');
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    isLoading = true;
+    update();
+
+    try {
+      final response = await _authService.deleteAccount();
+
+      if (response.statusCode == 200) {
+        _emailController.clear();
+        isChecked = false;
+        await StorageService.removeToken();
+        Get.offAll(() => LoginScreen());
+      } else {
+        Get.snackbar('Gagal', response.data['message']);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Terjadi kesalaham: $e');
+    } finally {
+      isLoading = true;
+      update();
+    }
+  }
+
+  Future<void> sendOtp() async {
+    isLoading = true;
+    update();
+
+    try {
+      await _authService.sendOtpChangePin(email: _emailController.text.trim());
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal mengirim otp: $e');
     } finally {
       isLoading = false;
       update();

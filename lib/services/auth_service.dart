@@ -227,4 +227,47 @@ class AuthService {
 
     return response;
   }
+
+  Future<Response> deleteAccount() async {
+    final token = await StorageService.getToken();
+
+    try {
+      final response = await DioClient.instance.delete(
+        '/auth/delete-account',
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to delete account: $e');
+    }
+  }
+
+  Future<Response> sendOtpChangePin({required String email}) async {
+    final token = await StorageService.getToken();
+
+    try {
+      final response = await DioClient.instance.post(
+        '/auth/send-otp-change-pin',
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          'email': email,
+        },
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to send otp: $e');
+    }
+  }
 }
