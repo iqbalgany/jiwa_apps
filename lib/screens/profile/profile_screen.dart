@@ -7,7 +7,9 @@ import 'package:jiwa_apps/utils/colors.dart';
 import '../../controllers/auth_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+
+  final AuthController authController = Get.find<AuthController>();
 
   void showTermsOfServiceBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -116,8 +118,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = authController.user;
-    if (user == null) {
+    if (authController.user == null) {
       return const Center(child: Text('Tidak ada data pengguna'));
     }
     return GetBuilder<AuthController>(
@@ -167,7 +168,7 @@ class ProfileScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              user.name ?? '-',
+                              authController.user!.name ?? '-',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -175,7 +176,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              user.phoneNumber ?? '-',
+                              authController.user!.phoneNumber ?? '-',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
@@ -216,7 +217,7 @@ class ProfileScreen extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              user.referralCode ?? '-',
+                              authController.user!.referralCode ?? '-',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 30,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:jiwa_apps/models/user_model..dart';
 import 'package:jiwa_apps/screens/authentication/input_pin_screen.dart';
 import 'package:jiwa_apps/screens/authentication/login_screen.dart';
@@ -94,18 +95,6 @@ class AuthController extends GetxController {
   }
 
   @override
-  void onInit() {
-    super.onInit();
-    getUserData();
-    for (var c in _pinController) {
-      c.clear();
-    }
-    for (var c in _otpController) {
-      c.clear();
-    }
-  }
-
-  @override
   void onClose() {
     for (final controller in _pinController) {
       controller.dispose();
@@ -174,6 +163,7 @@ class AuthController extends GetxController {
         final newToken = result.data['token'];
         if (newToken != null) {
           await StorageService.saveToken(result.data['token']);
+          getUserData();
           Get.offAll(() => NavBar());
         } else {
           Get.snackbar('Error', 'Token tidak ditemukan di respons');
@@ -203,6 +193,23 @@ class AuthController extends GetxController {
       Get.offAll(() => RegistrationFormScreen());
     } else if (result.data['status'] == 'error') {
       Get.snackbar('Login Gagal', message);
+    }
+  }
+
+  Future<void> verifyOtpChanePin() async {
+    final otp = otpController.map((c) => c.text).join();
+    final email = _emailController.text.trim();
+
+    isLoading = true;
+    update();
+
+    try {
+      await _authService.verifyOtpChangePin(email: email, otp: otp);
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal memverifikasi otp: $e');
+    } finally {
+      isLoading = false;
+      update();
     }
   }
 
@@ -237,6 +244,12 @@ class AuthController extends GetxController {
     if (success) {
       _emailController.clear();
       isChecked = false;
+      for (var c in _pinController) {
+        c.clear();
+      }
+      for (var c in _otpController) {
+        c.clear();
+      }
       await StorageService.removeToken();
       Get.offAll(() => LoginScreen());
     } else if (!success) {
@@ -273,12 +286,19 @@ class AuthController extends GetxController {
 
     try {
       final response = await _authService.editProfile(
-        name: nameController.text,
-        gender: genderLabels[selectedGender].toString(),
-        dateOfBirth: dateController.text,
-        region: citizenshipController.text,
-        job: jobController.text,
-        phoneNumber: numberController.text,
+        name:
+            nameController.text.isNotEmpty ? nameController.text : user!.name!,
+        gender: genderLabels[selectedGender],
+        dateOfBirth: dateController.text.isNotEmpty
+            ? dateController.text
+            : DateFormat("yyyy-MM-dd", "id_ID").format(user!.dateOfBirth!),
+        region: citizenshipController.text.isNotEmpty
+            ? citizenshipController.text
+            : user!.region!,
+        job: jobController.text.isNotEmpty ? jobController.text : user!.job!,
+        phoneNumber: numberController.text.isNotEmpty
+            ? numberController.text
+            : user!.phoneNumber!,
       );
 
       if (response.statusCode == 200) {
@@ -305,6 +325,12 @@ class AuthController extends GetxController {
       if (response.statusCode == 200) {
         _emailController.clear();
         isChecked = false;
+        for (var c in _pinController) {
+          c.clear();
+        }
+        for (var c in _otpController) {
+          c.clear();
+        }
         await StorageService.removeToken();
         Get.offAll(() => LoginScreen());
       } else {

@@ -11,6 +11,131 @@ class UpdateProfileScreen extends StatelessWidget {
 
   final AuthController authController = Get.find<AuthController>();
 
+  void _inpurNewPin(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.sizeOf(context).height * 0.9,
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 40,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[300],
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Buat PIN',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Masukkan 6 angka PIN untuk menjaga keamanan akun JIWA+',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 11,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 50),
+              Row(
+                children: List.generate(
+                  6,
+                  (index) => Expanded(
+                    child: Container(
+                      height: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color:
+                            authController.pinController[index].text.isNotEmpty
+                                ? AppColors.primary
+                                : Colors.transparent,
+                        border: Border.all(
+                          color: authController
+                                  .pinController[index].text.isNotEmpty
+                              ? AppColors.primary
+                              : Colors.grey[300]!,
+                          width: 2,
+                        ),
+                      ),
+                      child: KeyboardListener(
+                        focusNode: FocusNode(),
+                        onKeyEvent: (event) {
+                          if (event is KeyDownEvent &&
+                              event.logicalKey ==
+                                  LogicalKeyboardKey.backspace &&
+                              authController
+                                  .pinController[index].text.isEmpty &&
+                              index > 0) {
+                            authController.pinFocusNode[index - 1]
+                                .requestFocus();
+                          }
+                        },
+                        child: TextField(
+                          maxLength: 1,
+                          controller: authController.pinController[index],
+                          focusNode: authController.pinFocusNode[index],
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          cursorColor: Colors.transparent,
+                          decoration: InputDecoration(
+                            counterText: '',
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                          style: TextStyle(
+                            color: Colors.transparent,
+                            fontSize: 1,
+                          ),
+                          onChanged: (value) {
+                            authController.update();
+
+                            if (value.isNotEmpty && index < 5) {
+                              authController.pinFocusNode[index + 1]
+                                  .requestFocus();
+                            }
+
+                            final isComplete = authController.pinController
+                                .every((c) => c.text.isNotEmpty);
+
+                            if (isComplete) {
+                              FocusScope.of(context).unfocus();
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _verificationBottomSheet(BuildContext context) {
     authController.otpController.forEach((controller) => controller.clear());
     showModalBottomSheet(
@@ -128,7 +253,12 @@ class UpdateProfileScreen extends StatelessWidget {
                             }
                             final isCompleted = authController.otpController
                                 .every((c) => c.text.isNotEmpty);
-                            if (isCompleted) {}
+                            if (isCompleted) {
+                              FocusScope.of(context).unfocus();
+                              authController.verifyOtp();
+                              Get.back();
+                              _inpurNewPin(context);
+                            }
                           },
                         ),
                       ),
@@ -606,6 +736,14 @@ class UpdateProfileScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                         decoration: InputDecoration(
+                          labelText: authController.user!.name,
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          floatingLabelStyle:
+                              TextStyle(color: Colors.transparent),
                           contentPadding: EdgeInsets.zero,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -724,6 +862,15 @@ class UpdateProfileScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                         decoration: InputDecoration(
+                          labelText: DateFormat("yyyy-MM-dd", "id_ID")
+                              .format(authController.user!.dateOfBirth!),
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          floatingLabelStyle:
+                              TextStyle(color: Colors.transparent),
                           suffixIcon: Icon(Icons.calendar_month_outlined),
                           contentPadding: EdgeInsets.zero,
                           enabledBorder:
@@ -743,6 +890,7 @@ class UpdateProfileScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   decoration: BoxDecoration(
+                      color: Colors.grey[300],
                       border: Border.all(color: AppColors.greyText),
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
@@ -764,6 +912,15 @@ class UpdateProfileScreen extends StatelessWidget {
                         ),
                         controller: authController.emailController,
                         decoration: InputDecoration(
+                          enabled: false,
+                          labelText: authController.user!.email,
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          floatingLabelStyle:
+                              TextStyle(color: Colors.transparent),
                           contentPadding: EdgeInsets.zero,
                           enabledBorder:
                               OutlineInputBorder(borderSide: BorderSide.none),
@@ -802,6 +959,14 @@ class UpdateProfileScreen extends StatelessWidget {
                         controller: authController.numberController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                          labelText: authController.user!.phoneNumber,
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          floatingLabelStyle:
+                              TextStyle(color: Colors.transparent),
                           contentPadding: EdgeInsets.zero,
                           enabledBorder:
                               OutlineInputBorder(borderSide: BorderSide.none),
@@ -839,6 +1004,14 @@ class UpdateProfileScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                         decoration: InputDecoration(
+                          labelText: authController.user!.region,
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          floatingLabelStyle:
+                              TextStyle(color: Colors.transparent),
                           suffixIcon: Icon(Icons.arrow_drop_down_sharp),
                           contentPadding: EdgeInsets.zero,
                           enabledBorder:
@@ -879,6 +1052,14 @@ class UpdateProfileScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                         decoration: InputDecoration(
+                          labelText: authController.user!.job,
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          floatingLabelStyle:
+                              TextStyle(color: Colors.transparent),
                           suffixIcon: Icon(Icons.arrow_drop_down_sharp),
                           contentPadding: EdgeInsets.zero,
                           enabledBorder:

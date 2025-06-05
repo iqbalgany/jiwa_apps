@@ -198,14 +198,22 @@ class AuthService {
   }
 
   Future<Response> editProfile({
-    required String name,
-    required String gender,
-    required String dateOfBirth,
-    required String region,
-    required String job,
-    required String phoneNumber,
+    String? name,
+    String? gender,
+    String? dateOfBirth,
+    String? region,
+    String? job,
+    String? phoneNumber,
   }) async {
     final token = await StorageService.getToken();
+
+    final Map<String, dynamic> data = {};
+    if (name != null) data['name'] = name;
+    if (gender != null) data['gender'] = gender;
+    if (dateOfBirth != null) data['date_of_birth'] = dateOfBirth;
+    if (region != null) data['region'] = region;
+    if (job != null) data['job'] = job;
+    if (phoneNumber != null) data['phone_number'] = phoneNumber;
 
     final response = await DioClient.instance.post(
       '/auth/edit-profile',
@@ -268,6 +276,32 @@ class AuthService {
       return response;
     } catch (e) {
       throw Exception('Failed to send otp: $e');
+    }
+  }
+
+  Future<Response> verifyOtpChangePin({
+    required String email,
+    required String otp,
+  }) async {
+    final token = await StorageService.getToken();
+    try {
+      final response = await DioClient.instance.post(
+        '/auth/verify-otp-change-pin',
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          'email': email,
+          'otp': otp,
+        },
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to verify otp: $e');
     }
   }
 }
