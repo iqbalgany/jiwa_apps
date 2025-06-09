@@ -196,7 +196,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> verifyOtpChanePin() async {
+  Future<bool> verifyOtpChanePin({VoidCallback? onSuccess}) async {
     final otp = otpController.map((c) => c.text).join();
     final email = _emailController.text.trim();
 
@@ -204,9 +204,19 @@ class AuthController extends GetxController {
     update();
 
     try {
-      await _authService.verifyOtpChangePin(email: email, otp: otp);
+      final response =
+          await _authService.verifyOtpChangePin(email: email, otp: otp);
+
+      if (response.statusCode == 200) {
+        if (onSuccess != null) onSuccess();
+
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       Get.snackbar('Error', 'Gagal memverifikasi otp: $e');
+      return false;
     } finally {
       isLoading = false;
       update();

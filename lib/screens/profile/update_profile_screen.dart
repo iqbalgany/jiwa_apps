@@ -11,7 +11,7 @@ class UpdateProfileScreen extends StatelessWidget {
 
   final AuthController authController = Get.find<AuthController>();
 
-  void _inpurNewPin(BuildContext context) {
+  void _inputNewPin(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -121,6 +121,7 @@ class UpdateProfileScreen extends StatelessWidget {
 
                             if (isComplete) {
                               FocusScope.of(context).unfocus();
+                              Get.back();
                             }
                           },
                         ),
@@ -253,11 +254,12 @@ class UpdateProfileScreen extends StatelessWidget {
                             }
                             final isCompleted = authController.otpController
                                 .every((c) => c.text.isNotEmpty);
+
                             if (isCompleted) {
-                              FocusScope.of(context).unfocus();
-                              authController.verifyOtp();
-                              Get.back();
-                              _inpurNewPin(context);
+                              authController.verifyOtpChanePin(onSuccess: () {
+                                Get.back();
+                                _inputNewPin(context);
+                              });
                             }
                           },
                         ),
@@ -675,6 +677,15 @@ class UpdateProfileScreen extends StatelessWidget {
       ),
       body: GetBuilder(
         init: AuthController(),
+        initState: (_) {
+          for (final controller in authController.pinController) {
+            controller.dispose();
+          }
+
+          for (final focusNode in authController.pinFocusNode) {
+            focusNode.dispose();
+          }
+        },
         builder: (_) => SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),
