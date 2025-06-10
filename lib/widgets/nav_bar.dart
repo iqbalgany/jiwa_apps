@@ -46,7 +46,7 @@ class _NavBarState extends State<NavBar> {
         return const HomeScreen();
 
       case 1:
-        return const MenuScreen();
+        return MenuScreen();
 
       case 2:
         return const OrderScreen();

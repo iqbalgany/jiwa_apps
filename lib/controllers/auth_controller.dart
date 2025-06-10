@@ -58,13 +58,15 @@ class AuthController extends GetxController {
     'Lainnya',
   ];
 
-  final List<FocusNode> _otpFocusNode =
-      List.generate(4, (index) => FocusNode());
   final List<TextEditingController> _otpController =
       List.generate(4, (_) => TextEditingController());
 
+  final List<FocusNode> _otpFocusNode =
+      List.generate(4, (index) => FocusNode());
+
   final List<TextEditingController> _pinController =
       List.generate(6, (_) => TextEditingController());
+
   final List<FocusNode> _pinFocusNode = List.generate(6, (_) => FocusNode());
 
   List<FocusNode> get pinFocusNode => _pinFocusNode;
@@ -149,6 +151,7 @@ class AuthController extends GetxController {
     final email = _emailController.text;
 
     isLoading = true;
+    update();
 
     try {
       final result = isRegistered
@@ -174,9 +177,10 @@ class AuthController extends GetxController {
     } catch (e) {
       isLoading = false;
       Get.snackbar('Error', 'Terjadi kesalahan: ${e.toString()}');
+    } finally {
+      isLoading = false;
+      update();
     }
-
-    update();
   }
 
   Future<void> verifyOtp() async {
@@ -362,6 +366,27 @@ class AuthController extends GetxController {
       await _authService.sendOtpChangePin(email: _emailController.text.trim());
     } catch (e) {
       Get.snackbar('Error', 'Gagal mengirim otp: $e');
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<void> changePin() async {
+    final pinCode = fullPin;
+    final email = _emailController.text;
+
+    try {
+      final response =
+          await _authService.changePin(email: email, newPinCode: pinCode);
+
+      if (response.statusCode == 200) {
+        Get.back();
+      } else {
+        Get.snackbar('Gagal', response.data['message'] ?? 'Gagal mengubah pin');
+      }
+    } catch (e) {
+      Get.snackbar('Gagal', 'Terjadi kesalahan: $e');
     } finally {
       isLoading = false;
       update();

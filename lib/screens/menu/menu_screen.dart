@@ -1,222 +1,240 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jiwa_apps/controllers/product_controller.dart';
 import 'package:jiwa_apps/screens/menu/detail_menu_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
 class MenuScreen extends StatelessWidget {
-  const MenuScreen({super.key});
+  MenuScreen({super.key});
+
+  final ProductController productController = Get.find<ProductController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverAppBar(
-                    backgroundColor: AppColors.white,
-                    automaticallyImplyLeading: false,
-                    toolbarHeight: 85,
-                    title: Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        children: [
-                          distributionItem(
-                            context,
-                            icon: Icons.directions_walk_rounded,
-                            text: 'Take Away',
-                            index: 0,
-                          ),
-                          SizedBox(width: 10),
-                          distributionItem(
-                            context,
-                            icon: Icons.delivery_dining_rounded,
-                            text: 'Delivery',
-                            index: 1,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    backgroundColor: AppColors.white,
-                    toolbarHeight: 60,
-                    title: Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.store_mall_directory_outlined,
-                            color: AppColors.secondary,
-                            size: 28,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'KANNA HOMESTAY',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 12,
-                              color: Colors.black,
+      body: GetBuilder<ProductController>(
+        initState: (_) {
+          productController.getMenus();
+        },
+        builder: (_) {
+          if (productController.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return SafeArea(
+            child: Stack(
+              children: [
+                NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return [
+                      SliverAppBar(
+                        backgroundColor: AppColors.white,
+                        automaticallyImplyLeading: false,
+                        toolbarHeight: 85,
+                        title: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
                             ),
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          Spacer(),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Ubah',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: Colors.black,
+                          child: Row(
+                            children: [
+                              distributionItem(
+                                context,
+                                icon: Icons.directions_walk_rounded,
+                                text: 'Take Away',
+                                index: 0,
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    backgroundColor: AppColors.white,
-                    pinned: true,
-                    toolbarHeight: 80,
-                    title: Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(width: 20),
-                          Icon(
-                            Icons.search_rounded,
-                            color: AppColors.secondary,
-                            size: 28,
+                              SizedBox(width: 10),
+                              distributionItem(
+                                context,
+                                icon: Icons.delivery_dining_rounded,
+                                text: 'Delivery',
+                                index: 1,
+                              )
+                            ],
                           ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(0, 15, 5, 15),
-                                hintText: 'Search menu',
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
+                        ),
+                      ),
+                      SliverAppBar(
+                        automaticallyImplyLeading: false,
+                        backgroundColor: AppColors.white,
+                        toolbarHeight: 60,
+                        title: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.store_mall_directory_outlined,
+                                color: AppColors.secondary,
+                                size: 28,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'KANNA HOMESTAY',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 12,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ];
-              },
-              body: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      border: Border(
-                        top: BorderSide(
-                          color: Colors.grey[200]!,
-                          width: 3,
+                              Spacer(),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'Ubah',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: 80),
-                          itemCount: 15,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(bottom: 10, right: 10),
-                              padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 100,
-                                    width: 7,
-                                    color: AppColors.primary,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      'Special For Mahadevi Katarina',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                        color: AppColors.primary,
-                                      ),
+                      SliverAppBar(
+                        automaticallyImplyLeading: false,
+                        backgroundColor: AppColors.white,
+                        pinned: true,
+                        toolbarHeight: 80,
+                        title: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 20),
+                              Icon(
+                                Icons.search_rounded,
+                                color: AppColors.secondary,
+                                size: 28,
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(0, 15, 5, 15),
+                                    hintText: 'Search menu',
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide.none,
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 20),
-                            Text(
-                              'Special For Mahadevi Katarina',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w900,
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
+                    ];
+                  },
+                  body: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          border: Border(
+                            top: BorderSide(
+                              color: Colors.grey[200]!,
+                              width: 3,
                             ),
-                            SizedBox(height: 20),
-                            Expanded(
-                              child: GridView.builder(
-                                padding: EdgeInsets.only(
-                                    right: 10, bottom: 100, top: 40),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 0.7,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 50,
-                                  crossAxisCount: 2,
-                                ),
-                                itemCount: 9,
-                                itemBuilder: (context, index) {
-                                  return productCard(context);
-                                },
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.only(bottom: 80),
+                              itemCount: productController.categories.length,
+                              itemBuilder: (context, index) {
+                                final category =
+                                    productController.categories[index];
+                                return Container(
+                                  margin:
+                                      EdgeInsets.only(bottom: 10, right: 10),
+                                  padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: 100,
+                                        width: 7,
+                                        color: AppColors.primary,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          category.name ?? '-',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: AppColors.primary,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 20),
+                                Text(
+                                  'Special For Mahadevi Katarina',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Expanded(
+                                  child: GridView.builder(
+                                    padding: EdgeInsets.only(
+                                        right: 10, bottom: 100, top: 40),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio: 0.7,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 50,
+                                      crossAxisCount: 2,
+                                    ),
+                                    itemCount: productController
+                                        .categories[index].products,
+                                    itemBuilder: (context, index) {
+                                      return productCard(context);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

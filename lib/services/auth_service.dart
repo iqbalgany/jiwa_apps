@@ -304,4 +304,27 @@ class AuthService {
       throw Exception('Failed to verify otp: $e');
     }
   }
+
+  Future<Response> changePin({
+    required String email,
+    required String newPinCode,
+  }) async {
+    final token = await StorageService.getToken();
+
+    final response = await DioClient.instance.post(
+      '/auth/change-pin',
+      data: {
+        'email': email,
+        'new_pin_code': newPinCode,
+      },
+      options: Options(
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+
+    return response;
+  }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jiwa_apps/controllers/auth_controller.dart';
+import 'package:jiwa_apps/controllers/product_controller.dart';
 import 'package:jiwa_apps/screens/authentication/login_screen.dart';
 import 'package:jiwa_apps/services/storage_service.dart';
 import 'package:jiwa_apps/utils/colors.dart';
@@ -11,8 +12,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
 
-  final token = await StorageService.getToken();
   Get.put(AuthController());
+  Get.put(ProductController());
+
+  final token = await StorageService.getToken();
 
   runApp(MainApp(token: token));
 }
