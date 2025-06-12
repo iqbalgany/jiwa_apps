@@ -4,7 +4,7 @@ import 'package:jiwa_apps/models/category_model.dart';
 import 'package:jiwa_apps/services/storage_service.dart';
 
 class ProductService {
-  Future<List<CategoryModel>> fetchMenus() async {
+  Future<List<CategoryModel>> fetchProducts() async {
     final token = await StorageService.getToken();
 
     try {

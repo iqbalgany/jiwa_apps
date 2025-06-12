@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:jiwa_apps/controllers/product_controller.dart';
+import 'package:jiwa_apps/models/product_model.dart';
 import 'package:jiwa_apps/screens/menu/detail_menu_screen.dart';
 import 'package:jiwa_apps/utils/colors.dart';
 
@@ -15,7 +17,7 @@ class MenuScreen extends StatelessWidget {
       backgroundColor: AppColors.primary,
       body: GetBuilder<ProductController>(
         initState: (_) {
-          productController.getMenus();
+          productController.getProducts();
         },
         builder: (_) {
           if (productController.isLoading) {
@@ -162,29 +164,42 @@ class MenuScreen extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final category =
                                     productController.categories[index];
-                                return Container(
-                                  margin:
-                                      EdgeInsets.only(bottom: 10, right: 10),
-                                  padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        height: 100,
-                                        width: 7,
-                                        color: AppColors.primary,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Expanded(
-                                        child: Text(
-                                          category.name ?? '-',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13,
-                                            color: AppColors.primary,
+                                return GestureDetector(
+                                  onTap: () {
+                                    productController.selectedCategory(index);
+                                  },
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(bottom: 10, right: 10),
+                                    padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 100,
+                                          width: 7,
+                                          color: productController
+                                                      .selectedCategoryIndex ==
+                                                  index
+                                              ? AppColors.primary
+                                              : Colors.grey[300],
+                                        ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            category.name ?? '-',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                              color: productController
+                                                          .selectedCategoryIndex ==
+                                                      index
+                                                  ? AppColors.primary
+                                                  : Colors.grey[300],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
@@ -197,7 +212,10 @@ class MenuScreen extends StatelessWidget {
                               children: [
                                 SizedBox(height: 20),
                                 Text(
-                                  'Special For Mahadevi Katarina',
+                                  productController
+                                      .categories[productController
+                                          .selectedCategoryIndex]
+                                      .name!,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w900,
                                     fontSize: 14,
@@ -217,9 +235,16 @@ class MenuScreen extends StatelessWidget {
                                       crossAxisCount: 2,
                                     ),
                                     itemCount: productController
-                                        .categories[index].products,
+                                        .categories[productController
+                                            .selectedCategoryIndex]
+                                        .products!
+                                        .length,
                                     itemBuilder: (context, index) {
-                                      return productCard(context);
+                                      final product = productController
+                                          .categories[productController
+                                              .selectedCategoryIndex]
+                                          .products![index];
+                                      return productCard(context, product);
                                     },
                                   ),
                                 ),
@@ -239,10 +264,16 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Widget productCard(BuildContext context) {
+  Widget productCard(BuildContext context, ProductModel product) {
     return GestureDetector(
       onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => DetailMenuScreen())),
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailMenuScreen(
+            product: product,
+          ),
+        ),
+      ),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -271,7 +302,7 @@ class MenuScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Kopi Creamy Latte',
+                    product.name!,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -288,21 +319,36 @@ class MenuScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Rp20.500',
+                            NumberFormat.currency(
+                              locale: 'id_ID',
+                              symbol: 'Rp',
+                              decimalDigits: 0,
+                            ).format(
+                                double.tryParse(product.price ?? '0') ?? 0),
                             style: TextStyle(
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.bold,
                               fontSize: 12,
                               color: Colors.black,
                             ),
                           ),
                           Text(
-                            'Rp37.000',
+                            NumberFormat.currency(
+                              locale: 'id_ID',
+                              symbol: 'Rp',
+                              decimalDigits: 0,
+                            ).format(
+                                double.tryParse(product.originalPrice ?? '0') ??
+                                    0),
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 12,
-                              color: AppColors.primary,
+                              color: product.categoryId == 1
+                                  ? AppColors.primary
+                                  : Colors.transparent,
                               decoration: TextDecoration.lineThrough,
-                              decorationColor: AppColors.primary,
+                              decorationColor: product.categoryId == 1
+                                  ? AppColors.primary
+                                  : Colors.transparent,
                             ),
                           ),
                         ],
@@ -325,10 +371,11 @@ class MenuScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 120,
-            child: Image.asset(
-              'assets/kopi1.png',
-              height: 150,
+            left: 10,
+            bottom: 110,
+            child: Image.network(
+              product.imageUrlText!,
+              height: 130,
             ),
           ),
         ],

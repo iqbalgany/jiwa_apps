@@ -327,4 +327,27 @@ class AuthService {
 
     return response;
   }
+
+  Future<Response> forgotPin(String email) async {
+    final token = await StorageService.getToken();
+
+    try {
+      final response = await DioClient.instance.post(
+        '/auth/forgot-pin',
+        data: {
+          'email': email,
+        },
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to forgot pin: $e');
+    }
+  }
 }

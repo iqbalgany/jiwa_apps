@@ -392,4 +392,20 @@ class AuthController extends GetxController {
       update();
     }
   }
+
+  Future<void> sendForgotPin() async {
+    isLoading = true;
+    update();
+
+    try {
+      final response =
+          await _authService.forgotPin(_emailController.text.trim());
+
+      if (response.statusCode != 200) {
+        Get.snackbar('Gagal', response.data['message']);
+      }
+    } catch (e) {
+      Get.snackbar('Gagal', 'Gagal melakukan lupa sandi: $e');
+    }
+  }
 }
