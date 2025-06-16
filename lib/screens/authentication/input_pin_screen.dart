@@ -8,6 +8,139 @@ class InputPinScreen extends StatelessWidget {
   InputPinScreen({super.key});
 
   final AuthController authController = Get.find<AuthController>();
+  void _inputNewPin(BuildContext context) {
+    authController.pinController.forEach((controller) => controller.clear());
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return GetBuilder<AuthController>(
+          builder: (_) {
+            return Container(
+              height: MediaQuery.sizeOf(context).height * 0.9,
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 40,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Buat PIN',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Masukkan 6 angka PIN untuk menjaga keamanan akun JIWA+',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  Row(
+                    children: List.generate(
+                      6,
+                      (index) => Expanded(
+                        child: Container(
+                          height: 20,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: authController
+                                    .pinController[index].text.isNotEmpty
+                                ? AppColors.primary
+                                : Colors.transparent,
+                            border: Border.all(
+                              color: authController
+                                      .pinController[index].text.isNotEmpty
+                                  ? AppColors.primary
+                                  : Colors.grey[300]!,
+                              width: 2,
+                            ),
+                          ),
+                          child: KeyboardListener(
+                            focusNode: FocusNode(),
+                            onKeyEvent: (event) {
+                              if (event is KeyDownEvent &&
+                                  event.logicalKey ==
+                                      LogicalKeyboardKey.backspace &&
+                                  authController
+                                      .pinController[index].text.isEmpty &&
+                                  index > 0) {
+                                authController.pinFocusNode[index - 1]
+                                    .requestFocus();
+                              }
+                            },
+                            child: TextField(
+                              maxLength: 1,
+                              controller: authController.pinController[index],
+                              focusNode: authController.pinFocusNode[index],
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              cursorColor: Colors.transparent,
+                              decoration: InputDecoration(
+                                counterText: '',
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                              style: TextStyle(
+                                color: Colors.transparent,
+                                fontSize: 1,
+                              ),
+                              onChanged: (value) {
+                                authController.update();
+
+                                if (value.isNotEmpty && index < 5) {
+                                  authController.pinFocusNode[index + 1]
+                                      .requestFocus();
+                                } else if (value.isEmpty && index > 0) {
+                                  authController.pinFocusNode[index - 1]
+                                      .requestFocus();
+                                }
+
+                                final isComplete = authController.pinController
+                                    .every((c) => c.text.isNotEmpty);
+
+                                if (isComplete) {
+                                  FocusScope.of(context).unfocus();
+                                  authController.changeForgotPin();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
   void _verificationBottomSheet(BuildContext context) {
     authController.otpController.forEach((controller) => controller.clear());
@@ -126,7 +259,14 @@ class InputPinScreen extends StatelessWidget {
                             }
                             final isCompleted = authController.otpController
                                 .every((c) => c.text.isNotEmpty);
-                            if (isCompleted) {}
+                            if (isCompleted) {
+                              authController.verifyOtpForgotPin(
+                                onSuccess: () {
+                                  Get.back();
+                                  _inputNewPin(context);
+                                },
+                              );
+                            }
                           },
                         ),
                       ),

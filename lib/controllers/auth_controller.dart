@@ -200,33 +200,6 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<bool> verifyOtpChanePin({VoidCallback? onSuccess}) async {
-    final otp = otpController.map((c) => c.text).join();
-    final email = _emailController.text.trim();
-
-    isLoading = true;
-    update();
-
-    try {
-      final response =
-          await _authService.verifyOtpChangePin(email: email, otp: otp);
-
-      if (response.statusCode == 200) {
-        if (onSuccess != null) onSuccess();
-
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'Gagal memverifikasi otp: $e');
-      return false;
-    } finally {
-      isLoading = false;
-      update();
-    }
-  }
-
   Future<void> registerUser() async {
     final result = await _authService.registerUser(
       token: token,
@@ -372,6 +345,33 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<bool> verifyOtpChanePin({VoidCallback? onSuccess}) async {
+    final otp = otpController.map((c) => c.text).join();
+    final email = _emailController.text.trim();
+
+    isLoading = true;
+    update();
+
+    try {
+      final response =
+          await _authService.verifyOtpChangePin(email: email, otp: otp);
+
+      if (response.statusCode == 200) {
+        if (onSuccess != null) onSuccess();
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal memverifikasi otp: $e');
+      return false;
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
   Future<void> changePin() async {
     final pinCode = fullPin;
     final email = _emailController.text;
@@ -406,6 +406,54 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Gagal', 'Gagal melakukan lupa sandi: $e');
+    }
+  }
+
+  Future<bool> verifyOtpForgotPin({VoidCallback? onSuccess}) async {
+    final otp = otpController.map((c) => c.text).join();
+    final email = _emailController.text.trim();
+
+    isLoading = true;
+    update();
+
+    try {
+      final response =
+          await _authService.verifyOtpForgotPin(email: email, otp: otp);
+
+      if (response.statusCode == 200) {
+        if (onSuccess != null) onSuccess();
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal memverifikasi otp: $e');
+      return false;
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<void> changeForgotPin() async {
+    final pinCode = fullPin;
+    final email = _emailController.text;
+
+    try {
+      final response =
+          await _authService.changeForgotPin(email: email, newPinCode: pinCode);
+
+      if (response.statusCode == 200) {
+        Get.back();
+      } else {
+        Get.snackbar('Gagal', response.data['message'] ?? 'Gagal mengubah pin');
+      }
+    } catch (e) {
+      Get.snackbar('Gagal', 'Terjadi kesalahan: $e');
+    } finally {
+      isLoading = false;
+      update();
     }
   }
 }
